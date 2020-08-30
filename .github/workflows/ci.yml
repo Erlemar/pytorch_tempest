@@ -46,6 +46,6 @@ jobs:
       - name: Run flake8
         run: flake8
       - name: Run Mypy
-        run: mypy .
+        run: mypy  --ignore-missing-imports --warn-no-return --warn-redundant-casts --disallow-incomplete-defs .
       - name: tests
         run: pytest
