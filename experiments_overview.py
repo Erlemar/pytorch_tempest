@@ -33,8 +33,8 @@ if __name__ == '__main__':
     parser.add_argument('--metric', help='main config', type=str, default='main_score')
     args = parser.parse_args()
 
-    initialize(config_dir=args.config_dir, strict=True)
+    initialize(config_path=args.config_dir, strict=True)
 
-    cfg = compose(config_file=args.main_config)
+    cfg = compose(config_name=args.main_config)
 
     show_scores(cfg, args.metric)
