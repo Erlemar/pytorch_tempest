@@ -6,6 +6,7 @@ from omegaconf import DictConfig
 
 from src.utils.technical_utils import load_obj
 
+
 class LitImageClassification(pl.LightningModule):
     def __init__(self, hparams: Dict[str, float], cfg: DictConfig):
         super(LitImageClassification, self).__init__()
@@ -32,20 +33,27 @@ class LitImageClassification(pl.LightningModule):
             optimizer = load_obj(self.cfg.optimizer.class_name)(self.model.parameters(), **self.cfg.optimizer.params)
         scheduler = load_obj(self.cfg.scheduler.class_name)(optimizer, **self.cfg.scheduler.params)
 
-        return [optimizer], [{'scheduler': scheduler,
-                              'interval': self.cfg.scheduler.step,
-                              'monitor': self.cfg.scheduler.monitor}]
+        return (
+            [optimizer],
+            [{'scheduler': scheduler, 'interval': self.cfg.scheduler.step, 'monitor': self.cfg.scheduler.monitor}],
+        )
 
     def training_step(
-            self, batch: torch.Tensor, batch_idx: int
+        self, batch: torch.Tensor, batch_idx: int
     ) -> Union[int, Dict[str, Union[torch.Tensor, Dict[str, torch.Tensor]]]]:
         image = batch['image']
         target = batch['target']
         logits, loss = self(image, target)
         score = self.metric(logits.argmax(1), target)
         logs = {'train_loss': loss, f'train_{self.cfg.training.metric}': score}
-        return {'loss': loss, 'log': logs, 'progress_bar': logs,
-                'logits': logits, 'target': target, f'train_{self.cfg.training.metric}': score}
+        return {
+            'loss': loss,
+            'log': logs,
+            'progress_bar': logs,
+            'logits': logits,
+            'target': target,
+            f'train_{self.cfg.training.metric}': score,
+        }
 
     def training_epoch_end(self, outputs):
         avg_loss = torch.stack([x['loss'] for x in outputs]).mean()
@@ -59,7 +67,7 @@ class LitImageClassification(pl.LightningModule):
         return {'log': logs, 'progress_bar': logs}
 
     def validation_step(
-            self, batch: torch.Tensor, batch_idx: int
+        self, batch: torch.Tensor, batch_idx: int
     ) -> Union[int, Dict[str, Union[torch.Tensor, Dict[str, torch.Tensor]]]]:
         image = batch['image']
         target = batch['target']
@@ -67,8 +75,14 @@ class LitImageClassification(pl.LightningModule):
         score = self.metric(logits.argmax(1), target)
         logs = {'valid_loss': loss, f'valid_{self.cfg.training.metric}': score}
 
-        return {'loss': loss, 'log': logs, 'progress_bar': logs, 'logits': logits, 'target': target,
-                f'valid_{self.cfg.training.metric}': score}
+        return {
+            'loss': loss,
+            'log': logs,
+            'progress_bar': logs,
+            'logits': logits,
+            'target': target,
+            f'valid_{self.cfg.training.metric}': score,
+        }
 
     def validation_epoch_end(self, outputs):
         avg_loss = torch.stack([x['loss'] for x in outputs]).mean()

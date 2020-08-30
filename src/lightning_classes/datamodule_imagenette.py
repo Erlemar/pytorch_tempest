@@ -12,7 +12,6 @@ from src.utils.technical_utils import load_obj
 
 
 class ImagenetteDataModule(pl.LightningDataModule):
-
     def __init__(self, hparams: Dict[str, float], cfg: DictConfig):
         super().__init__()
         self.cfg = cfg
@@ -22,16 +21,18 @@ class ImagenetteDataModule(pl.LightningDataModule):
         pass
 
     def setup(self, stage=None):
-        mapping_dict = {'n01440764': 0,
-                        'n02102040': 1,
-                        'n02979186': 2,
-                        'n03000684': 3,
-                        'n03028079': 4,
-                        'n03394916': 5,
-                        'n03417042': 6,
-                        'n03425413': 7,
-                        'n03445777': 8,
-                        'n03888257': 9}
+        mapping_dict = {
+            'n01440764': 0,
+            'n02102040': 1,
+            'n02979186': 2,
+            'n03000684': 3,
+            'n03028079': 4,
+            'n03394916': 5,
+            'n03417042': 6,
+            'n03425413': 7,
+            'n03445777': 8,
+            'n03888257': 9,
+        }
         train_labels = []
         train_images = []
         for folder in glob.glob(f'{self.cfg.datamodule.path}/train/*'):
@@ -62,8 +63,22 @@ class ImagenetteDataModule(pl.LightningDataModule):
         train_augs = load_augs(self.cfg['augmentation']['train']['augs'])
         valid_augs = load_augs(self.cfg['augmentation']['valid']['augs'])
 
-        self.train_dataset = dataset_class(image_names=train_images, labels=train_labels, transforms=train_augs, mode='train', labels_to_ohe=self.cfg.datamodule.labels_to_ohe)
-        self.valid_dataset = dataset_class(image_names=val_images, labels=val_labels, transforms=valid_augs, mode='valid', labels_to_ohe=self.cfg.datamodule.labels_to_ohe)
+        self.train_dataset = dataset_class(
+            image_names=train_images,
+            labels=train_labels,
+            transforms=train_augs,
+            mode='train',
+            labels_to_ohe=self.cfg.datamodule.labels_to_ohe,
+            n_classes=self.cfg.training.n_classes,
+        )
+        self.valid_dataset = dataset_class(
+            image_names=val_images,
+            labels=val_labels,
+            transforms=valid_augs,
+            mode='valid',
+            labels_to_ohe=self.cfg.datamodule.labels_to_ohe,
+            n_classes=self.cfg.training.n_classes,
+        )
 
     def train_dataloader(self):
         train_loader = torch.utils.data.DataLoader(

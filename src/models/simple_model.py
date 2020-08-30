@@ -25,6 +25,7 @@ class Net(nn.Module):
         loss = self.loss(logits, targets).view(1)
         return logits, loss
 
+
 #
 # get_arch = lambda: nn.Sequential(
 #     nn.Sequential(*list(resnet50(pretrained=True).children())[:6]),

@@ -26,16 +26,19 @@ def load_augs(cfg: DictConfig) -> A.Compose:
             small_augs = []
             for small_aug in a['params']:
                 # yaml can't contain tuples, so we need to convert manually
-                params = {k: (v if type(v) != omegaconf.listconfig.ListConfig else tuple(v)) for k, v in
-                          small_aug['params'].items()}
+                params = {
+                    k: (v if type(v) != omegaconf.listconfig.ListConfig else tuple(v))
+                    for k, v in small_aug['params'].items()
+                }
                 aug = load_obj(small_aug['class_name'])(**params)
                 small_augs.append(aug)
             aug = load_obj(a['class_name'])(small_augs)
             augs.append(aug)
 
         else:
-            params = {k: (v if type(v) != omegaconf.listconfig.ListConfig else tuple(v)) for k, v in
-                      a['params'].items()}
+            params = {
+                k: (v if type(v) != omegaconf.listconfig.ListConfig else tuple(v)) for k, v in a['params'].items()
+            }
             aug = load_obj(a['class_name'])(**params)
             augs.append(aug)
 
@@ -64,8 +67,9 @@ def get_training_datasets(cfg: DictConfig) -> Dict:
 
     else:
 
-        folds = list(stratified_group_k_fold(X=train.index,
-                                              y=train['target'], groups=train['patient_id'], k=cfg.data.n_folds))
+        folds = list(
+            stratified_group_k_fold(X=train.index, y=train['target'], groups=train['patient_id'], k=cfg.data.n_folds)
+        )
         train_idx, valid_idx = folds[cfg.data.fold_n]
 
         valid = train.iloc[valid_idx]

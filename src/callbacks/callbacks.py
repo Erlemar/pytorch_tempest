@@ -22,6 +22,7 @@ class MetricsCallback(pl.Callback):
     def on_validation_end(self, trainer, pl_module):
         self.metrics.append(trainer.callback_metrics)
 
+
 class StagerCallback(pl.Callback):
     def on_epoch_start(self, trainer, pl_module):
         pl_module.configure_optimizers()

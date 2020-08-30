@@ -1,3 +1,5 @@
+from typing import Optional, Union
+
 from efficientnet_pytorch import EfficientNet
 from torch import nn
 
@@ -7,6 +9,7 @@ class BackboneModeI(nn.Module):
     By phalanx @ZFPhalanx
 
     """
+
     def __init__(self, backbone_name: str, pretrain: bool = True, advdrop: bool = False):
         super().__init__()
         self.backbone_name = backbone_name
@@ -14,9 +17,12 @@ class BackboneModeI(nn.Module):
         self.model = None
 
         if 'resnext' in backbone_name or 'resnet' in backbone_name or backbone_name.startswith('resnest'):
+            pretrain_value: Optional[Union[bool, str]] = None
             if backbone_name.startswith('se'):
-                pretrain = 'imagenet' if pretrain else None
-            model = eval(backbone_name)(pretrain=pretrain)
+                pretrain_value = 'imagenet' if pretrain else None
+            else:
+                pretrain_value = pretrain
+            model = eval(backbone_name)(pretrain=pretrain_value)
             if backbone_name.startswith('se'):
                 self.encoder.append(nn.Sequential(model.layer0, model.layer1))
             else:

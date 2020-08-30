@@ -10,34 +10,13 @@ from omegaconf import DictConfig
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping, LearningRateLogger
 from pytorch_lightning.loggers import CometLogger, WandbLogger, TensorBoardLogger
 
-from src.lightning_classes.lightning_melanoma import LitMelanoma
 from src.lightning_classes.datamodule_mnist import MNISTDataModule
-from src.lightning_classes.lightning_mnist import LightningMNISTClassifier
 from src.lightning_classes.datamodule_melanoma import MelanomaDataModule
 from src.utils.loggers import CsvLogger
 from src.utils.utils import set_seed, save_useful_info
 from src.utils.technical_utils import load_obj, flatten_omegaconf
 
-warnings.filterwarnings("ignore")
-
-# TODO implement stager !!!
-# TODO docs !!!
-# TODO use train/eval result
-# TODO continue training
-
-# TODO implement training on folds/cv
-# TODO think about hyperparameter tuning. maybe simply using hydra
-
-# TODO read more hydra docs
-# TODO possibility to not log code
-
-
-# TODO change mnist dataset to albumentations
-# TODO use dicts to pass data +
-# TODO get rid of def get_model ! done+
-# TODO use loggers config +
-# TODO config for folder name +
-# TODO think about refactoring: data and dataset. trainer and training !!!!!! +++
+warnings.filterwarnings('ignore')
 
 
 def run(cfg: DictConfig, new_dir: str) -> None:
@@ -103,4 +82,3 @@ def run_model(cfg: DictConfig) -> None:
 
 if __name__ == '__main__':
     run_model()
-

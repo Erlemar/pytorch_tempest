@@ -6,8 +6,7 @@ from src.utils.ml_utils import freeze_until
 
 
 class EfficientNetEncoder(nn.Module):
-    def __init__(self, arch: str = 'efficientnet-b0', freeze: bool = False,
-                 freeze_until_layer: str = None) -> None:
+    def __init__(self, arch: str = 'efficientnet-b0', freeze: bool = False, freeze_until_layer: str = None) -> None:
         """
         Initialize Encoder.
 

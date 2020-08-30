@@ -13,7 +13,6 @@ from src.utils.technical_utils import load_obj
 
 
 class MelanomaDataModule(pl.LightningDataModule):
-
     def __init__(self, hparams: Dict[str, float], cfg: DictConfig):
         super().__init__()
         self.cfg = cfg
@@ -36,9 +35,11 @@ class MelanomaDataModule(pl.LightningDataModule):
 
         else:
 
-            folds = list(stratified_group_k_fold(X=train.index,
-                                                 y=train['target'], groups=train['patient_id'],
-                                                 k=self.cfg.datamodule.n_folds))
+            folds = list(
+                stratified_group_k_fold(
+                    X=train.index, y=train['target'], groups=train['patient_id'], k=self.cfg.datamodule.n_folds
+                )
+            )
             train_idx, valid_idx = folds[self.cfg.datamodule.fold_n]
 
             valid = train.iloc[valid_idx]
@@ -56,18 +57,24 @@ class MelanomaDataModule(pl.LightningDataModule):
         #
         # self.valid_dataset = dataset_class(df=valid, mode='valid', img_path=self.cfg.datamodule.train_image_path,
         #                                    transforms=valid_augs)
-        self.train_dataset = dataset_class(image_names=train['image_name'].values,
-                                           transforms=train_augs,
-                                           labels=train['target'].values,
-                                           img_path=self.cfg.datamodule.train_image_path,
-                                           mode='train',
-                                           labels_to_ohe=False)
-        self.valid_dataset = dataset_class(image_names=valid['image_name'].values,
-                                           transforms=valid_augs,
-                                           labels=valid['target'].values,
-                                           img_path=self.cfg.datamodule.train_image_path,
-                                           mode='valid',
-                                           labels_to_ohe=False)
+        self.train_dataset = dataset_class(
+            image_names=train['image_name'].values,
+            transforms=train_augs,
+            labels=train['target'].values,
+            img_path=self.cfg.datamodule.train_image_path,
+            mode='train',
+            labels_to_ohe=False,
+            n_classes=self.cfg.training.n_classes,
+        )
+        self.valid_dataset = dataset_class(
+            image_names=valid['image_name'].values,
+            transforms=valid_augs,
+            labels=valid['target'].values,
+            img_path=self.cfg.datamodule.train_image_path,
+            mode='valid',
+            labels_to_ohe=False,
+            n_classes=self.cfg.training.n_classes,
+        )
 
     def train_dataloader(self):
         train_loader = torch.utils.data.DataLoader(

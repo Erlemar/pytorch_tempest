@@ -1,6 +1,7 @@
 from typing import Dict
 
 import pytorch_lightning as pl
+from omegaconf import DictConfig
 from torch.utils.data import random_split, DataLoader
 from torchvision import transforms
 from torchvision.datasets import MNIST
@@ -8,8 +9,7 @@ from src.datasets.mnist_dataset import MnistDataset
 
 
 class MNISTDataModule(pl.LightningDataModule):
-
-    def __init__(self, cfg, hparams: Dict[str, float], data_dir: str = './'):
+    def __init__(self, cfg: DictConfig, hparams: Dict[str, float], data_dir: str = './'):
         super().__init__()
         self.data_dir = data_dir
         self.cfg = cfg
@@ -21,10 +21,7 @@ class MNISTDataModule(pl.LightningDataModule):
         MnistDataset(self.data_dir, train=False, download=True)
 
     def setup(self, stage=None):
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.1307,), (0.3081,))
-        ])
+        transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
 
         # Assign train/val datasets for use in dataloaders
         if stage == 'fit' or stage is None:
