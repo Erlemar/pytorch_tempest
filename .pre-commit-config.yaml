@@ -9,7 +9,7 @@ repos:
     rev: 19.3b0
     hooks:
     -   id: black
-        args: [--config=black.toml]
+        args: [--config=pyproject.toml]
 -   repo: https://github.com/pre-commit/mirrors-mypy
     rev: 9feadeb
     hooks:

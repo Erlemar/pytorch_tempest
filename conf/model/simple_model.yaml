@@ -4,7 +4,7 @@ params:
 encoder:
   class_name: src.models.encoders.basic_encoder.BasicEncoder
   params:
-    pretrained: None
+    pretrained: imagenet
     arch: resnet50
     n_layers: -2
     freeze: False

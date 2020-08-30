@@ -7,7 +7,7 @@ loggers:
 
   - class_name: pytorch_lightning.loggers.TensorBoardLogger
     params:
-      save_dir: ${general.logs_folder_name}
+      save_dir: .
       name: ${general.run_dir}
 
   - class_name: pytorch_lightning.loggers.CometLogger
