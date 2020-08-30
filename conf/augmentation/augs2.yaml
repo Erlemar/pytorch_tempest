@@ -1,0 +1,57 @@
+# @package _group_
+train:
+  augs:
+  - class_name: albumentations.Resize
+    params:
+      height: 256
+      width: 256
+  - class_name: albumentations.RandomRotate90
+    params:
+      p: 0.5
+  - class_name: albumentations.OneOf
+    params:
+      - class_name: albumentations.Rotate
+        params:
+          limit:
+            - 0
+            - 0
+          p: 1.0
+      - class_name: albumentations.Rotate
+        params:
+          limit:
+            - 90
+            - 90
+          p: 1.0
+      - class_name: albumentations.Rotate
+        params:
+          limit:
+            - 180
+            - 180
+          p: 1.0
+      - class_name: albumentations.Rotate
+        params:
+          limit:
+            - 270
+            - 270
+          p: 1.0
+  - class_name: albumentations.VerticalFlip
+    params:
+      p: 0.5
+  - class_name: albumentations.Normalize
+    params:
+      p: 1.0
+  - class_name: albumentations.pytorch.transforms.ToTensorV2
+    params:
+      p: 1.0
+valid:
+  augs:
+  - class_name: albumentations.Resize
+    params:
+      height: 256
+      width: 256
+  - class_name: albumentations.Normalize
+    params:
+        p: 1.0
+  - class_name: albumentations.pytorch.transforms.ToTensorV2
+    params:
+        p: 1.0

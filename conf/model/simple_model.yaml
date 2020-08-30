@@ -1,0 +1,17 @@
+# @package _group_
+class_name: src.models.simple_model.Net
+params:
+encoder:
+  class_name: src.models.encoders.basic_encoder.BasicEncoder
+  params:
+    pretrained: None
+    arch: resnet50
+    n_layers: -2
+    freeze: False
+    to_one_channel: False
+    freeze_until_layer:
+decoder:
+  class_name: src.models.decoders.basic_decoder.BasicDecoder
+  params:
+    pool_output_size: 1
+    n_classes: ${training.n_classes}

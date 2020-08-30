@@ -1,0 +1,19 @@
+# @package _group_
+early_stopping:
+  class_name: pytorch_lightning.callbacks.EarlyStopping
+  params:
+    monitor: ${training.metric}
+    patience: 2
+    mode: ${training.mode}
+
+model_checkpoint:
+  class_name: pytorch_lightning.callbacks.ModelCheckpoint
+  params:
+    monitor: ${training.metric}
+    save_top_k: 3
+    filepath: /saved_models/{epoch}_{main_score:.4f}
+    mode: ${training.mode}
+
+other_callbacks:
+  - class_name: pytorch_lightning.callbacks.LearningRateLogger
+    params:

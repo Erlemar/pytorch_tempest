@@ -1,0 +1,10 @@
+# @package _group_
+gpus: 1
+distributed_backend: dp
+accumulate_grad_batches: 1
+profiler: False
+max_epochs: 10
+log_save_interval: 100
+num_sanity_val_steps: 0
+gradient_clip_val: 0.5
+weights_summary: top

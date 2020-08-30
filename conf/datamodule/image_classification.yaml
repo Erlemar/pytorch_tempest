@@ -1,0 +1,10 @@
+# @package _group_
+path: f:/imagenette2-160
+n_folds: 3
+fold_n: 0
+class_name: src.datasets.dataset.ImageClassificationDataset
+labels_to_ohe: False
+num_workers: 0
+batch_size: 256
+pin_memory: True
+

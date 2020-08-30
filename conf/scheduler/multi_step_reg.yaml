@@ -1,0 +1,6 @@
+# @package _group_
+class_name: torch.optim.lr_scheduler.MultiStepLR
+step: epoch
+params:
+  milestones: [300, 600, 900, 1500]
+  gamma: 0.5

@@ -1,0 +1,14 @@
+# @package _group_
+class_name: src.models.simple_model.Net
+params:
+encoder:
+  class_name: src.models.encoders.efficientnet_encoder.EfficientNetEncoder
+  params:
+    arch: efficientnet-b1
+    freeze: False
+    freeze_until_layer:
+decoder:
+  class_name: src.models.decoders.basic_decoder.BasicDecoder
+  params:
+    pool_output_size: 2
+    n_classes: 1
