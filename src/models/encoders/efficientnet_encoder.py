@@ -1,4 +1,3 @@
-import pretrainedmodels
 from efficientnet_pytorch import EfficientNet
 from torch import nn
 

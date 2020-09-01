@@ -1,8 +1,6 @@
-import torch
+import numpy as np
 from PIL import Image
 from torchvision.datasets import MNIST
-import os
-import numpy as np
 
 
 class MnistDataset(MNIST):

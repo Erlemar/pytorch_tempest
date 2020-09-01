@@ -1,7 +1,7 @@
 import argparse
 import csv
-from typing import Dict, Optional, Union, Any, List
-import json
+from typing import Dict, Optional, Union, Any
+
 from pytorch_lightning.loggers import LightningLoggerBase
 
 

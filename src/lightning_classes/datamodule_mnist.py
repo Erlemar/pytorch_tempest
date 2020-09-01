@@ -5,6 +5,7 @@ from omegaconf import DictConfig
 from torch.utils.data import random_split, DataLoader
 from torchvision import transforms
 from torchvision.datasets import MNIST
+
 from src.datasets.mnist_dataset import MnistDataset
 
 

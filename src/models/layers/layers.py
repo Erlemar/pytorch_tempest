@@ -1,7 +1,6 @@
 import torch
-from torch import nn
-
 import torch.functional as F
+from torch import nn
 from torch.nn.parameter import Parameter
 
 

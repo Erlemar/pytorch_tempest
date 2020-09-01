@@ -1,20 +1,14 @@
-import datetime
 import os
 import warnings
-from argparse import ArgumentParser
 
 import hydra
 import pytorch_lightning as pl
 import torch
 from omegaconf import DictConfig
-from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping, LearningRateLogger
-from pytorch_lightning.loggers import CometLogger, WandbLogger, TensorBoardLogger
+from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 
-from src.lightning_classes.datamodule_mnist import MNISTDataModule
-from src.lightning_classes.datamodule_melanoma import MelanomaDataModule
-from src.utils.loggers import CsvLogger
-from src.utils.utils import set_seed, save_useful_info
 from src.utils.technical_utils import load_obj, flatten_omegaconf
+from src.utils.utils import set_seed, save_useful_info
 
 warnings.filterwarnings('ignore')
 

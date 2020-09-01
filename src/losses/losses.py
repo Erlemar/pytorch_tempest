@@ -1,5 +1,5 @@
-from torch import nn
 import torch.functional as F
+from torch import nn
 
 
 class DenseCrossEntropy(nn.Module):

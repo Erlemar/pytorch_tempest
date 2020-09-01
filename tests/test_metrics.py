@@ -2,6 +2,7 @@ import numpy as np
 import pytest
 import torch
 from sklearn.metrics import f1_score
+
 from src.metrics.f1_score import F1Score
 from src.utils.utils import set_seed
 
