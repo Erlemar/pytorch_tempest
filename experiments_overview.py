@@ -1,14 +1,15 @@
-import comet_ml
-from hydra.experimental import initialize, compose
-import pandas as pd
 import argparse
+
+import comet_ml
+import pandas as pd
+from hydra.experimental import initialize, compose
 from omegaconf import DictConfig
 
 
-def show_scores(cfg: DictConfig, metric: str = 'main_score') -> None:
-    comet_api = comet_ml.api.API(cfg.private.comet_api)
+def show_scores(local_cfg: DictConfig, metric: str = 'main_score') -> None:
+    comet_api = comet_ml.api.API(local_cfg.private.comet_api)
 
-    experiments = comet_api.get(f'{cfg.general.workspace}/{cfg.general.project_name}')
+    experiments = comet_api.get(f'{local_cfg.general.workspace}/{local_cfg.general.project_name}')
 
     experiment_results = []
     for experiment in experiments:
