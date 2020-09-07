@@ -5,7 +5,6 @@ import pytorch_lightning as pl
 import torch
 from omegaconf import DictConfig
 from sklearn.model_selection import train_test_split
-from torch.utils.data import random_split
 
 from src.datasets.get_dataset import load_augs
 from src.utils.ml_utils import stratified_group_k_fold

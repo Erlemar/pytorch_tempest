@@ -5,7 +5,6 @@ from typing import Dict
 import pytorch_lightning as pl
 import torch
 from omegaconf import DictConfig
-from torch.utils.data import random_split
 
 from src.datasets.get_dataset import load_augs
 from src.utils.technical_utils import load_obj

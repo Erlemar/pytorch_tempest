@@ -29,4 +29,6 @@ general:
 hydra:
   run:
     dir: .
+  sweep:
+    dir: .
   output_subdir: outputs/${now:%Y-%m-%d_%H-%M-%S}/.hydra
