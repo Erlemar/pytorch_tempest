@@ -17,3 +17,5 @@ model_checkpoint:
 other_callbacks:
   - class_name: pytorch_lightning.callbacks.LearningRateLogger
     params:
+  - class_name: pytorch_lightning.callbacks.GPUStatsMonitor
+    params:
