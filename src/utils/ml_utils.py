@@ -31,7 +31,7 @@ def freeze_until(net: Any, param_name: str = None) -> None:
         params.requires_grad = found_name
 
 
-def stratified_group_k_fold(X, y, groups, k, seed=None):
+def stratified_group_k_fold(y, groups, k, seed=None):
     """ https://www.kaggle.com/jakubwasikowski/stratified-group-k-fold-cross-validation """
     labels_num = np.max(y) + 1
     y_counts_per_group = collections.defaultdict(lambda: np.zeros(labels_num))
