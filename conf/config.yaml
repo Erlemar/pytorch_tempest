@@ -13,10 +13,11 @@ defaults:
   - metric: accuracy
   - inference: basic
   - hydra/hydra_logging: colorlog
-  - hydra/job_logging: disabled
+  - hydra/job_logging: colorlog
 
 general:
-  run_name: ${now:%Y-%m-%d_%H-%M-%S}
+  #  run_name: ${now:%Y-%m-%d_%H-%M-%S}
+  run_name: ${now:%Y-%m-%d_%H-%M-%S}_${hydra.job.override_dirname}
   run_dir: outputs/${general.run_name}
   logs_folder_name: logs
   logs_dir: ${general.run_dir}/${general.logs_folder_name}
@@ -31,4 +32,5 @@ hydra:
     dir: .
   sweep:
     dir: .
-  output_subdir: outputs/${now:%Y-%m-%d_%H-%M-%S}/.hydra
+    subdir: .
+  output_subdir: outputs/${general.run_name}/${hydra.job.override_dirname}/.hydra

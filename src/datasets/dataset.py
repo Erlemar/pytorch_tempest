@@ -18,7 +18,7 @@ class ImageClassificationDataset(Dataset):
         n_classes: int = 1,
     ):
         """
-        Prepare data for wheat competition.
+        Image classification dataset.
 
         Args:
             df: dataframe with image id and bboxes
@@ -32,6 +32,7 @@ class ImageClassificationDataset(Dataset):
         self.img_path = img_path
         self.image_names = image_names
         # print('labels_to_ohe', labels_to_ohe)
+        # TODO rename labels and targets into one name
         if labels:
             if not labels_to_ohe:
                 self.labels = np.array(labels)
@@ -42,6 +43,7 @@ class ImageClassificationDataset(Dataset):
     def __getitem__(self, idx: int) -> Dict[str, np.array]:
         image_path = self.img_path + self.image_names[idx]
         image = cv2.imread(f'{image_path}', cv2.IMREAD_COLOR)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         if image is None:
             raise FileNotFoundError(image_path)
         target = self.labels[idx]
