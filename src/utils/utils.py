@@ -2,6 +2,7 @@ import os
 import random
 import shutil
 
+import hydra
 import numpy as np
 import torch
 
@@ -17,6 +18,12 @@ def set_seed(seed: int = 666) -> None:
     torch.cuda.manual_seed_all(seed)
 
 
-def save_useful_info(new_dir: str) -> None:
-    shutil.copytree(os.path.join(os.getcwd(), 'src'), os.path.join(os.getcwd(), f'{new_dir}/code/src'))
-    shutil.copy2(os.path.join(os.getcwd(), 'train.py'), os.path.join(os.getcwd(), new_dir, 'code'))
+def save_useful_info() -> None:
+    shutil.copytree(
+        os.path.join(hydra.utils.get_original_cwd(), 'src'),
+        os.path.join(hydra.utils.get_original_cwd(), f'{os.getcwd()}/code/src'),
+    )
+    shutil.copy2(
+        os.path.join(hydra.utils.get_original_cwd(), 'train.py'),
+        os.path.join(hydra.utils.get_original_cwd(), os.getcwd(), 'code'),
+    )

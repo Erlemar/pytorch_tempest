@@ -13,7 +13,7 @@ from src.utils.utils import set_seed, save_useful_info
 warnings.filterwarnings('ignore')
 
 
-def run(cfg: DictConfig, new_dir: str) -> None:
+def run(cfg: DictConfig) -> None:
     """
     Run pytorch-lightning model
 
@@ -25,7 +25,7 @@ def run(cfg: DictConfig, new_dir: str) -> None:
     set_seed(cfg.training.seed)
     hparams = flatten_omegaconf(cfg)
 
-    cfg.callbacks.model_checkpoint.params.filepath = new_dir + cfg.callbacks.model_checkpoint.params.filepath
+    cfg.callbacks.model_checkpoint.params.filepath = os.getcwd() + cfg.callbacks.model_checkpoint.params.filepath
     callbacks = []
     for callback in cfg.callbacks.other_callbacks:
         if callback.params:
@@ -54,19 +54,19 @@ def run(cfg: DictConfig, new_dir: str) -> None:
     if cfg.general.save_pytorch_model:
         # save as a simple torch model
         # TODO save not last, but best - for this load the checkpoint and save pytorch model from it
-        model_name = cfg.general.run_dir + '/saved_models/' + cfg.general.run_dir.split('/')[-1] + '.pth'
+        os.makedirs('saved_models', exist_ok=True)
+        model_name = 'saved_models/best.pth'
         print(model_name)
         torch.save(model.model.state_dict(), model_name)
 
 
 @hydra.main(config_path='conf', config_name='config')
 def run_model(cfg: DictConfig) -> None:
-    os.makedirs(cfg.general.logs_dir, exist_ok=True)
-    new_dir = cfg.general.run_dir
+    os.makedirs('logs', exist_ok=True)
     print(cfg.pretty())
     if cfg.general.log_code:
-        save_useful_info(new_dir)
-    run(cfg, new_dir)
+        save_useful_info()
+    run(cfg)
 
 
 if __name__ == '__main__':
