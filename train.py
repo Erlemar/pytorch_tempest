@@ -48,7 +48,7 @@ def run(cfg: DictConfig) -> None:
     )
 
     model = load_obj(cfg.training.lightning_module_name)(hparams=hparams, cfg=cfg)
-    dm = load_obj(cfg.training.data_module_name)(hparams=hparams, cfg=cfg)
+    dm = load_obj(cfg.datamodule.data_module_name)(hparams=hparams, cfg=cfg)
     trainer.fit(model, dm)
 
     if cfg.general.save_pytorch_model:

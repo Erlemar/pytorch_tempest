@@ -3,6 +3,7 @@ path: f:/imagenette2-160
 n_folds: 3
 fold_n: 0
 class_name: src.datasets.dataset.ImageClassificationDataset
+data_module_name: src.lightning_classes.datamodule_imagenette.ImagenetteDataModule
 labels_to_ohe: False
 num_workers: 0
 batch_size: 256

@@ -6,6 +6,3 @@ seed: 666
 debug: True
 n_classes: 10
 lightning_module_name: src.lightning_classes.lightning_image_classification.LitImageClassification
-data_module_name: src.lightning_classes.datamodule_imagenette.ImagenetteDataModule
-
-#data_module_name: src.lightning_classes.datamodule_mnist.MNISTDataModule

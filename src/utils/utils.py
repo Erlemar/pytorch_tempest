@@ -19,6 +19,8 @@ def set_seed(seed: int = 666) -> None:
 
 
 def save_useful_info() -> None:
+    print(hydra.utils.get_original_cwd())
+    print(os.getcwd())
     shutil.copytree(
         os.path.join(hydra.utils.get_original_cwd(), 'src'),
         os.path.join(hydra.utils.get_original_cwd(), f'{os.getcwd()}/code/src'),
