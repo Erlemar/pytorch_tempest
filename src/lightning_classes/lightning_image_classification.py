@@ -91,5 +91,5 @@ class LitImageClassification(pl.LightningModule):
         score = self.metric(y_pred.argmax(1), y_true)
 
         # score = torch.tensor(1.0, device=self.device)
-        logs = {'valid_loss': avg_loss, f'valid_{self.cfg.training.metric}': score}
-        return {'valid_loss': avg_loss, 'log': logs, 'progress_bar': logs, self.cfg.training.metric: score}
+        logs = {'valid_loss': avg_loss, f'valid_{self.cfg.training.metric}': score, self.cfg.training.metric: score}
+        return {'valid_loss': avg_loss, 'log': logs, 'progress_bar': logs}

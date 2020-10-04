@@ -82,7 +82,7 @@ def flatten_omegaconf(d, sep='_'):
     def recurse(t, parent_key=''):
 
         if isinstance(t, list):
-            for i in range(len(t)):
+            for i, _ in enumerate(t):
                 recurse(t[i], parent_key + sep + str(i) if parent_key else str(i))
         elif isinstance(t, dict):
             for k, v in t.items():
@@ -91,7 +91,7 @@ def flatten_omegaconf(d, sep='_'):
             obj[parent_key] = t
 
     recurse(d)
-    obj = {k: v for k, v in obj.items() if type(v) in [int, float]}
+    obj = {k: v for k, v in obj.items() if isinstance(v, (int, float))}
     # obj = {k: v for k, v in obj.items()}
 
     return obj
