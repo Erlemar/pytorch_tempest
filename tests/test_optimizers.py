@@ -11,5 +11,5 @@ from src.utils.technical_utils import load_obj
 def test_optimizers(opt_name: str) -> None:
     optimizer_name = opt_name.split('.')[0]
     with initialize(config_path='../conf'):
-        cfg = compose(config_name='config', overrides=[f'optimizer={optimizer_name}'])
+        cfg = compose(config_name='config', overrides=[f'optimizer={optimizer_name}', 'private=default'])
         load_obj(cfg.optimizer.class_name)(torch.nn.Linear(1, 1).parameters(), **cfg.optimizer.params)
