@@ -1,9 +1,9 @@
 albumentations==0.4.5
-comet_ml==3.1.11
+comet_ml==3.2.3
 pretrainedmodels==0.7.4
 efficientnet_pytorch==0.6.3
 torch==1.6.0
-omegaconf==2.0.1rc11
+omegaconf==2.0.2
 pytorch_toolbelt==0.3.2
 hydra_core==1.0.3
 hydra_colorlog==1.0.0rc2
