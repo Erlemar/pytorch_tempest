@@ -7,7 +7,7 @@ from hydra.experimental import compose, initialize
 from src.utils.technical_utils import load_obj
 
 
-@pytest.mark.parametrize('opt_name', os.listdir('../conf/optimizer'))
+@pytest.mark.parametrize('opt_name', os.listdir('conf/optimizer'))
 def test_optimizers(opt_name: str) -> None:
     optimizer_name = opt_name.split('.')[0]
     with initialize(config_path='../conf'):

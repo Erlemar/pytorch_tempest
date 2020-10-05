@@ -7,7 +7,7 @@ from hydra.experimental import compose, initialize
 from src.utils.technical_utils import load_obj
 
 
-@pytest.mark.parametrize('sch_name', os.listdir('../conf/scheduler'))
+@pytest.mark.parametrize('sch_name', os.listdir('conf/scheduler'))
 def test_schedulers(sch_name: str) -> None:
     scheduler_name = sch_name.split('.')[0]
     with initialize(config_path='../conf'):
