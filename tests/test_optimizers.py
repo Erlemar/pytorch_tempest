@@ -11,7 +11,7 @@ path = os.path.abspath(os.path.join(os.getcwd(), os.pardir)) + '/conf'
 
 @pytest.mark.parametrize('opt_name', os.listdir(path + '/optimizer'))
 def test_optimizers(opt_name: str, path: str = path) -> None:
-    opt_name = opt_name.split('.')[0]
+    optimizer_name = opt_name.split('.')[0]
     with initialize_config_dir(config_dir=path):
-        cfg = compose(config_name='config', overrides=[f'optimizer={opt_name}'])
+        cfg = compose(config_name='config', overrides=[f'optimizer={optimizer_name}'])
         load_obj(cfg.optimizer.class_name)(torch.nn.Linear(1, 1).parameters(), **cfg.optimizer.params)
