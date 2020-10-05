@@ -6,7 +6,7 @@ torch==1.6.0
 omegaconf==2.0.1rc11
 pytorch_toolbelt==0.3.2
 hydra_core==1.0.3
-hydra_colorlog=1.0.0rc2
+hydra_colorlog==1.0.0rc2
 pytest==5.4.1
 numpy==1.18.5
 pandas==1.0.5
