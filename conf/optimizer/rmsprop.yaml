@@ -1,0 +1,4 @@
+# @package _group_
+class_name: torch.optim.RMSprop
+params:
+  lr: ${training.lr}
