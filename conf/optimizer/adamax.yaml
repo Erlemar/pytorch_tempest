@@ -1,0 +1,4 @@
+# @package _group_
+class_name: torch.optim.Adamax
+params:
+  lr: ${training.lr}
