@@ -4,7 +4,7 @@ defaults:
   - training: default_training
   - logging: loggers
   - optimizer: adamw
-  - scheduler: lambda
+  - scheduler: plateau
   - model: simple_model
   - callbacks: callbacks
   - private: custom
