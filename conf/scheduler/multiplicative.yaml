@@ -1,0 +1,6 @@
+# @package _group_
+class_name: torch.optim.lr_scheduler.MultiplicativeLR
+step: step
+params:
+  lr_lambda: ${training.lr}
+  last_epoch: -1
