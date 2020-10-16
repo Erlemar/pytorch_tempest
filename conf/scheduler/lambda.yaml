@@ -1,0 +1,7 @@
+# @package _group_
+class_name: src.schedulers.lambdar.LambdaLRConfig
+step: epoch
+monitor: ${training.metric}
+params:
+  lr_lambda: 'lambda epoch: epoch // 30'
+  last_epoch: -1

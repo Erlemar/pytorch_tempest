@@ -1,6 +1,7 @@
 # @package _group_
 class_name: torch.optim.lr_scheduler.StepLR
 step: epoch
+monitor: ${training.metric}
 params:
   step_size: 10
   gamma: 0.9
