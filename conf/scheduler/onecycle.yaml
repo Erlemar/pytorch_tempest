@@ -1,0 +1,8 @@
+# @package _group_
+class_name: torch.optim.lr_scheduler.OneCycleLR
+step: step
+monitor: ${training.metric}
+params:
+  total_steps: 500
+  max_lr: 0.01
+  last_epoch: -1
