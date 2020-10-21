@@ -3,10 +3,10 @@ from torch.optim.lr_scheduler import MultiplicativeLR
 
 
 class MultiplicativeLRConfig(MultiplicativeLR):
-    '''
+    """
     Inherit MultiplicativeLR so that it can be defined in config.
     Reference: https://pytorch.org/docs/stable/_modules/torch/optim/lr_scheduler.html#MultiplicativeLR
-    '''
+    """
 
     def __init__(self, optimizer: torch.optim.Optimizer, lr_lambda: str, last_epoch=-1):
         lr_lambda = eval(lr_lambda)
