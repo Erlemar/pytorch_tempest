@@ -15,7 +15,7 @@ model_checkpoint:
     mode: ${training.mode}
 
 other_callbacks:
-  - class_name: pytorch_lightning.callbacks.LearningRateLogger
+  - class_name: pytorch_lightning.callbacks.LearningRateMonitor
     params:
   - class_name: pytorch_lightning.callbacks.GPUStatsMonitor
     params:

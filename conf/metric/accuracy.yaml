@@ -2,4 +2,4 @@
 class_name: pytorch_lightning.metrics.classification.Accuracy
 metric_name: accuracy
 params:
-  num_classes: ${training.n_classes}
+  threshold: 0.5
