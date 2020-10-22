@@ -19,4 +19,4 @@ class LambdaLRConfig(LambdaLR):
                 raise ValueError(f'Expected {len(optimizer.param_groups)} lr_lambdas, but got {len(lr_lambda)}')
             self.lr_lambdas = list(lr_lambda)
         self.last_epoch = last_epoch
-        super(LambdaLR, self).__init__(optimizer, last_epoch)
+        super().__init__(optimizer, lr_lambda, last_epoch)
