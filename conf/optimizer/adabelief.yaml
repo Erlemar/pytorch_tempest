@@ -1,0 +1,7 @@
+# @package _group_
+class_name: adabelief_pytorch.AdaBelief
+params:
+  lr: ${training.lr}
+  eps: 1e-16
+  weight_decouple: True
+  rectify: False

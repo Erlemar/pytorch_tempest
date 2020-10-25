@@ -14,3 +14,6 @@ torchvision==0.7.0
 pytorch_lightning==1.0.3
 Pillow==7.2.0
 scikit_learn==0.23.2
+adabound==0.0.5
+adabelief-pytorch==0.0.5
+ranger-adabelief==0.0.9
