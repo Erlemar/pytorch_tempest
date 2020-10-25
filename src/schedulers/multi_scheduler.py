@@ -8,7 +8,7 @@ class MultiplicativeLRConfig(MultiplicativeLR):
     Reference: https://pytorch.org/docs/stable/_modules/torch/optim/lr_scheduler.html#MultiplicativeLR
     """
 
-    def __init__(self, optimizer: torch.optim.Optimizer, lr_lambda: str, last_epoch=-1):
+    def __init__(self, optimizer: torch.optim.Optimizer, lr_lambda: str, last_epoch: int = -1):
         lr_lambda = eval(lr_lambda)
         self.optimizer = optimizer
 
@@ -20,4 +20,4 @@ class MultiplicativeLRConfig(MultiplicativeLR):
             self.lr_lambdas = list(lr_lambda)
 
         self.last_epoch = last_epoch
-        super(MultiplicativeLR, self).__init__(optimizer, last_epoch)
+        super().__init__(optimizer, lr_lambda, last_epoch)
