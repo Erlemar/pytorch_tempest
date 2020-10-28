@@ -8,3 +8,25 @@ Main frameworks used:
 
 * [hydra](https://github.com/facebookresearch/hydra)
 * [pytorch-lightning](https://github.com/PyTorchLightning/pytorch-lightning)
+
+The main ideas of the pipeline:
+
+* all parameters and modules are defined in configs;
+* have prepared configs for different optimizers/schedulers and so on, so it is easy to switch between them;
+* have templates for different deep learning tasks. Currently only image classification is supported;
+
+Examples of running the pipeline:
+
+```shell
+>>> python train.py --config-name mnist_config model.encoder.params.to_one_channel=True
+```
+
+This will run training on MNIST (data will be downloaded)
+
+```shell
+>>> python train.py
+```
+
+The default version of the pipeline is run on imagenette dataset. To do it downdload the data from this repository:
+https://github.com/fastai/imagenette
+unzip it and define path to it in conf/datamodule/image_classification.yaml path

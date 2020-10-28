@@ -24,33 +24,3 @@ class Net(nn.Module):
         logits = self.decoder(out)
         loss = self.loss(logits, targets).view(1)
         return logits, loss
-
-
-#
-# get_arch = lambda: nn.Sequential(
-#     nn.Sequential(*list(resnet50(pretrained=True).children())[:6]),
-#     nn.Sequential(*list(resnet50(pretrained=True).children())[6:-2]),
-#     create_head(4096, 264),
-#     nn.Sigmoid()
-# )
-#
-#
-# class Model(nn.Module):
-#     def __init__(self):
-#         super().__init__()
-#         self.cnn = nn.Sequential(*list(torchvision.models.resnet34(True).children())[:-2])
-#         self.classifier = nn.Sequential(*[
-#             nn.Linear(512, 512), nn.ReLU(), nn.Dropout(p=0.5), nn.BatchNorm1d(512),
-#             nn.Linear(512, 512), nn.ReLU(), nn.Dropout(p=0.5), nn.BatchNorm1d(512),
-#             nn.Linear(512, len(classes))
-#         ])
-#
-#     def forward(self, x):
-#         bs, im_num, ch, y_dim, x_dim = x.shape
-#         x = self.cnn(x.view(-1, ch, y_dim, x_dim))
-#         x = x.mean((2, 3))
-#         x = self.classifier(x)
-#         x = x.view(bs, im_num, -1)
-#         x = lme_pool(x)
-#         return x
-#
