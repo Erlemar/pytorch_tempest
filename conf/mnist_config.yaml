@@ -7,7 +7,7 @@ defaults:
   - scheduler: plateau
   - model: simple_model
   - callbacks: callbacks
-  - private: custom
+  - private: default
   - augmentation: basic_augs
   - loss: cross_entropy
   - metric: accuracy
