@@ -168,8 +168,10 @@ def get_vector(embedding_type: str, embedding_index: dict, word: str) -> Optiona
 
     if embedding_type in ['word2vec', 'glove']:
         emb = embedding_index.get(word)
-    elif embedding_type == 'fasttext':
-        emb = embedding_index[word] if word in embedding_index.keys() else None
+    elif embedding_type == 'fasttext' and type(embedding_index) == FastText:
+        emb = embedding_index[word]
+    elif embedding_type == 'fasttext' and type(embedding_index) == dict:
+        emb = embedding_index.get(word)
     return emb
 
 

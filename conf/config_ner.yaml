@@ -8,7 +8,6 @@ defaults:
   - model: bilstm_crf_simple
   - callbacks: callbacks
   - private: custom
-  - augmentation: basic_augs
   - metric: f1_score
   - inference: basic
   - hydra/hydra_logging: colorlog
@@ -24,7 +23,7 @@ general:
 
 hydra:
   run:
-    dir: outputs/${now:%Y-%m-%d_%H-%M-%S}_${hydra.job.override_dirname}
+    dir: outputs/${now:%Y-%m-%d_%H-%M-%S}
   sweep:
     dir: outputs/${now:%Y-%m-%d_%H-%M-%S}
     subdir: ${hydra.job.override_dirname}
