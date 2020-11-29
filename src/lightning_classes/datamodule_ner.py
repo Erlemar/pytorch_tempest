@@ -40,10 +40,10 @@ class NerDataModule(pl.LightningDataModule):
 
         with open(filepath, 'r') as f:
             for line in f.readlines():
-                if line == ('-DOCSTART- -X- -X- O\n') or line == '\n':
+                if line in [('-DOCSTART- -X- -X- O\n'), '\n']:
                     # Sentence as a sequence of tokens, POS, chunk and NE tags
                     if tok != []:
-                        sentence = dict({'text': [], 'labels': []})
+                        sentence = {'text': [], 'labels': []}
                         sentence['text'] = tok
                         sentence['labels'] = ne
 
@@ -68,10 +68,10 @@ class NerDataModule(pl.LightningDataModule):
 
         # generate tag_to_idx
         labels = [labels['labels'] for labels in ner_data]
-        flat_labels = list(set([label for sublist in labels for label in sublist]))
-        entities_names = sorted(set([label.split('-')[1] for label in flat_labels if label != 'O']))
+        flat_labels = list({label for sublist in labels for label in sublist})
+        entities_names = sorted({label.split('-')[1] for label in flat_labels if label != 'O'})
         if self.cfg.datamodule.tag_to_idx_from_labels:
-            self.tag_to_idx = {v: i for i, v in enumerate(set([i for j in labels for i in j])) if v != 'O'}
+            self.tag_to_idx = {v: i for i, v in enumerate({i for j in labels for i in j}) if v != 'O'}
             for special_tag in ['O', 'PAD']:
                 self.tag_to_idx[special_tag] = len(self.tag_to_idx)
         else:

@@ -53,7 +53,7 @@ class NerDataset(Dataset):
         return self.data_len
 
 
-class Collator(object):
+class Collator:
     def __init__(self, test=False, percentile=100, pad_value=0):
         self.test = test
         self.percentile = percentile

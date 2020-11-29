@@ -1,6 +1,6 @@
 import pickle
 from collections import Counter
-from typing import List, Union, Dict, Tuple, Any
+from typing import List, Union, Dict, Tuple, Any, Optional
 
 import numpy as np
 import torch.nn as nn
@@ -154,7 +154,7 @@ def load_embeddings(embedding_path: str, embedding_type: str = 'fasttext') -> Un
         return None
 
 
-def get_vector(embedding_type: str, embedding_index: dict, word: str) -> np.array:
+def get_vector(embedding_type: str, embedding_index: dict, word: str) -> Optional[np.array]:
     """
     Return vector in relation to embedding_type parameter
     Args:
@@ -164,11 +164,13 @@ def get_vector(embedding_type: str, embedding_index: dict, word: str) -> np.arra
     Returns:
         word vector
     """
+    emb = np.array()
 
-    if embedding_type == 'word2vec' or embedding_type == 'glove':
-        return embedding_index.get(word)
+    if embedding_type in ['word2vec', 'glove']:
+        emb = embedding_index.get(word)
     elif embedding_type == 'fasttext':
-        return embedding_index[word] if word in embedding_index.keys() else None
+        emb = embedding_index[word] if word in embedding_index.keys() else None
+    return emb
 
 
 def build_matrix(
@@ -195,7 +197,7 @@ def build_matrix(
         raise ValueError('Unacceptable embedding type.\nPermissible values: word2vec, glove, fasttext')
     embedding_index = load_embeddings(embedding_path, embeddings_type)
     nb_words = min(max_features, len(word_dict))
-    if embeddings_type == 'word2vec' or embeddings_type == 'glove':
+    if embeddings_type in ['word2vec', 'glove']:
         embed_size = embed_size if embed_size is not None else len(list(embedding_index.values())[0])
         all_embs = np.stack(embedding_index.values())
         emb_mean, emb_std = all_embs.mean(), all_embs.std()
@@ -226,7 +228,14 @@ def build_matrix(
     return embedding_matrix, nb_words, unknown_words
 
 
-def pad_sequences(sequences, maxlen=None, dtype='int32', padding='post', truncating='post', value=0):
+def pad_sequences(
+    sequences: List,
+    maxlen: Optional[int],
+    dtype: str = 'int32',
+    padding: str = 'post',
+    truncating: str = 'post',
+    value: int = 0,
+) -> np.array:
     """Pad sequences to the same length.
     from Keras
 
