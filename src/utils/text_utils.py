@@ -164,7 +164,7 @@ def get_vector(embedding_type: str, embedding_index: dict, word: str) -> Optiona
     Returns:
         word vector
     """
-    emb = np.array()
+    emb = None
 
     if embedding_type in ['word2vec', 'glove']:
         emb = embedding_index.get(word)
