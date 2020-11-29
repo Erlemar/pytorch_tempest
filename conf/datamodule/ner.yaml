@@ -1,0 +1,18 @@
+# @package _group_
+class_name: src.datasets.text_dataset.NerDataset
+params:
+  use_bulio_tokens: True
+vectorizer_class_name: src.datasets.text_dataset.Vectorizer
+data_module_name: src.lightning_classes.datamodule_ner.NerDataModule
+pin_memory: False
+prepare_data: True
+folder_path: d:/DataScience/Python_projects/Current_projects/pytorch_tempest/data/
+file_name: conll2003/train.txt
+tag_to_idx_from_labels: True
+word_to_idx_name:
+num_workers: 0
+batch_size: 512
+valid_size: 0.1
+embeddings_dim: 300
+embeddings_path: f:/crawl-300d-2M.pkl
+embeddings_type: fasttext

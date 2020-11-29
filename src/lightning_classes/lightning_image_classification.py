@@ -41,6 +41,7 @@ class LitImageClassification(pl.LightningModule):
     def training_step(
         self, batch: torch.Tensor, batch_idx: int
     ) -> Union[int, Dict[str, Union[torch.Tensor, Dict[str, torch.Tensor]]]]:
+        # TODO: one method for train/val step/epoch
         image = batch['image']
         target = batch['target']
         logits, loss = self(image, target)

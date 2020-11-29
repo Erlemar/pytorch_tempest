@@ -3,7 +3,9 @@ early_stopping:
   class_name: pytorch_lightning.callbacks.EarlyStopping
   params:
     monitor: ${training.metric}
-    patience: 2
+    patience: 5
+    min_delta: 0.001
+    verbose: True
     mode: ${training.mode}
 
 model_checkpoint:
@@ -17,5 +19,5 @@ model_checkpoint:
 other_callbacks:
   - class_name: pytorch_lightning.callbacks.LearningRateMonitor
     params:
-  - class_name: pytorch_lightning.callbacks.GPUStatsMonitor
-    params:
+#  - class_name: pytorch_lightning.callbacks.GPUStatsMonitor
+#    params:
