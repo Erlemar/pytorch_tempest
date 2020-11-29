@@ -57,7 +57,6 @@ class LitNER(pl.LightningModule):
         return {'val_loss': loss.item(), 'tag_seq': tag_seq, 'labels': labels, 'step_f1': f1_score.item()}
 
     def validation_epoch_end(self, outputs):
-        print('val_loss', outputs[0]['val_loss'])
         avg_loss = np.stack([x['val_loss'] for x in outputs]).mean()
         f1_mean = np.stack([x['step_f1'] for x in outputs]).mean()
         y_true = torch.cat([x['labels'] for x in outputs])
