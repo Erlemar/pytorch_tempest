@@ -43,6 +43,7 @@ class CsvLogger(LightningLoggerBase):
 
 
 class PrintLogger(LightningLoggerBase):
+    # TODO Check if works
     @property
     def experiment(self) -> Any:
         pass

@@ -1,0 +1,7 @@
+# @package _group_
+lr: 0.1
+metric: ${metric.metric_name}
+mode: "max"
+seed: 666
+debug: False
+lightning_module_name: src.lightning_classes.lightning_ner.LitNER

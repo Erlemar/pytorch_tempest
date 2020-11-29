@@ -31,7 +31,6 @@ class ImageClassificationDataset(Dataset):
         self.transforms = transforms
         self.img_path = img_path
         self.image_names = image_names
-        # print('labels_to_ohe', labels_to_ohe)
         # TODO rename labels and targets into one name
         if labels:
             if not labels_to_ohe:
@@ -50,8 +49,6 @@ class ImageClassificationDataset(Dataset):
 
         img = self.transforms(image=image)['image']
         sample = {'image': img, 'target': np.array(target).astype('int64')}
-        # print(sample)
-        # print(img.shape, target.shape, image_path)
 
         return sample
 

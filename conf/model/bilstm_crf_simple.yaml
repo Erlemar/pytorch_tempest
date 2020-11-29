@@ -1,0 +1,5 @@
+# @package _group_
+class_name: src.models.pytorch_models_crf.BiLSTMCRF
+params:
+  hidden_dim: 128
+  spatial_dropout: 0.2
