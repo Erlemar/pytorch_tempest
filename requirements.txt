@@ -5,8 +5,8 @@ efficientnet_pytorch==0.6.3
 torch==1.7.0
 omegaconf==2.0.5
 pytorch_toolbelt==0.3.2
-hydra_core==1.0.3
-hydra_colorlog==1.0.0rc2
+hydra_core==1.0.4
+hydra_colorlog==1.0.0
 pytest==6.1.2
 numpy==1.19.4
 pandas==1.1.4
