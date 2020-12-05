@@ -22,6 +22,7 @@ general:
   device: cuda
   log_code: True
   save_pytorch_model: True
+  save_best: True
 
 hydra:
   run:

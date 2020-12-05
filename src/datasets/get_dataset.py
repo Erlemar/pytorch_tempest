@@ -1,3 +1,4 @@
+# type: ignore
 import albumentations as A
 import omegaconf
 from omegaconf import DictConfig
