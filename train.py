@@ -54,12 +54,17 @@ def run(cfg: DictConfig) -> None:
     trainer.fit(model, dm)
 
     if cfg.general.save_pytorch_model:
-        # save as a simple torch model
-        # TODO save not last, but best - for this load the checkpoint and save pytorch model from it
-        os.makedirs('saved_models', exist_ok=True)
-        model_name = 'saved_models/best.pth'
-        print(model_name)
-        torch.save(model.model.state_dict(), model_name)
+        if cfg.general.save_best:
+            best_path = trainer.checkpoint_callback.best_model_path  # type: ignore
+            # extract file name without folder and extension
+            save_name = best_path.split('/')[-1][:-5]
+            model = model.load_from_checkpoint(best_path, hparams=hparams, cfg=cfg, strict=False)
+            model_name = f'saved_models/{save_name}.pth'
+            torch.save(model.model.state_dict(), model_name)
+        else:
+            os.makedirs('saved_models', exist_ok=True)
+            model_name = 'saved_models/last.pth'
+            torch.save(model.model.state_dict(), model_name)
 
 
 @hydra.main(config_path='conf', config_name='config')
