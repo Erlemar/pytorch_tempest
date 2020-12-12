@@ -1,0 +1,33 @@
+# @package _group_
+train:
+  augs:
+    - class_name: albumentations.Flip
+      params:
+        p: 0.5
+    - class_name: albumentations.ShiftScaleRotate
+      params:
+        shift_limit: 0.0625
+        scale_limit: 0.1
+        rotate_limit: 15
+    - class_name: albumentations.Resize
+      params:
+        height: ${datamodule.main_image_size}
+        width: ${datamodule.main_image_size}
+    - class_name: albumentations.Normalize
+      params:
+        p: 1.0
+    - class_name: albumentations.pytorch.transforms.ToTensorV2
+      params:
+        p: 1.0
+valid:
+  augs:
+  - class_name: albumentations.Resize
+    params:
+      height: ${datamodule.main_image_size}
+      width: ${datamodule.main_image_size}
+  - class_name: albumentations.Normalize
+    params:
+        p: 1.0
+  - class_name: albumentations.pytorch.transforms.ToTensorV2
+    params:
+        p: 1.0
