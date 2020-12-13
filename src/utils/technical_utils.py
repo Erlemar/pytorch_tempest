@@ -3,7 +3,9 @@ import importlib
 from itertools import product
 from typing import Any, Dict, Generator
 
+import torch
 from omegaconf import DictConfig, OmegaConf
+from torch import nn
 
 
 def load_obj(obj_path: str, default_obj_path: str = '') -> Any:
@@ -25,6 +27,19 @@ def load_obj(obj_path: str, default_obj_path: str = '') -> Any:
     if not hasattr(module_obj, obj_name):
         raise AttributeError(f'Object `{obj_name}` cannot be loaded from `{obj_path}`.')
     return getattr(module_obj, obj_name)
+
+
+def convert_to_jit(model: nn.Module, save_name: str, cfg: DictConfig) -> None:
+    input_shape = (1, 3, cfg.datamodule.main_image_size, cfg.datamodule.main_image_size)
+    input_shape1 = 1
+    out_path = f'saved_models/{save_name}_jit.pt'
+    model.eval()
+
+    device = next(model.parameters()).device
+    input_tensor = torch.ones(input_shape).float().to(device)
+    input_tensor1 = torch.ones(input_shape1, dtype=torch.long).to(device)
+    traced_model = torch.jit.trace(model, (input_tensor, input_tensor1))
+    torch.jit.save(traced_model, out_path)
 
 
 def product_dict(**kwargs: Dict) -> Generator:

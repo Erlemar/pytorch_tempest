@@ -1,0 +1,10 @@
+# @package _group_
+log: True
+loggers:
+  - class_name: pytorch_lightning.loggers.CometLogger
+    params:
+      save_dir: ${general.logs_folder_name}
+      workspace: ${general.workspace}
+      project_name: ${general.project_name}
+      api_key: ${private.comet_api}
+      experiment_name: ${general.run_name}
