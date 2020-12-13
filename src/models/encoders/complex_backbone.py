@@ -72,6 +72,6 @@ class BackboneModeI(nn.Module):
                 outputs.append(x)
 
         if self.return_only_last_output:
-            return outputs[-1]
-        else:
-            return outputs
+            outputs = outputs[-1]
+
+        return outputs
