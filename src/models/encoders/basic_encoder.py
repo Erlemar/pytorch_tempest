@@ -1,5 +1,9 @@
+from typing import Union
+
 import pretrainedmodels
+import timm
 import torch
+import torchvision
 from efficientnet_pytorch import EfficientNet
 from torch import nn
 
@@ -10,7 +14,8 @@ class BasicEncoder(nn.Module):
     def __init__(
         self,
         arch: str = 'resnet18',
-        pretrained: str = 'imagenet',
+        source: str = 'pretrainedmodels',
+        pretrained: Union[str, bool] = 'imagenet',
         n_layers: int = -2,
         freeze: bool = False,
         to_one_channel: bool = False,
@@ -28,12 +33,19 @@ class BasicEncoder(nn.Module):
             freeze_until: freeze until this layer. If None, then freeze all layers
         """
         super().__init__()
-        if 'eff' in arch:
-            net = EfficientNet.from_pretrained(arch)
-            self.output_dimension = net._fc.in_features
-        else:
+        if source == 'pretrainedmodels':
             net = pretrainedmodels.__dict__[arch](pretrained=pretrained)
             self.output_dimension = list(net.children())[-1].in_features
+        elif source == 'torchvision':
+            net = torchvision.models.__dict__[arch](pretrained=pretrained)
+            self.output_dimension = list(net.children())[-1].in_features
+        elif source == 'timm':
+            net = timm.create_model(arch, pretrained=pretrained)
+            self.output_dimension = net.fc.in_features
+        if source == 'efficientnet':
+            net = EfficientNet.from_pretrained(arch)
+            self.output_dimension = net._fc.in_features
+
         if freeze:
             freeze_until(net, freeze_until_layer)
 
@@ -47,7 +59,6 @@ class BasicEncoder(nn.Module):
             # substituting weights of newly created Conv2d with w from but we have to take mean
             # to go from  3 channel to 1
             layers[0].weight = nn.Parameter(torch.mean(w, dim=1, keepdim=True))
-            layers = nn.Sequential(*layers)
 
         self.layers = nn.Sequential(*layers)
 

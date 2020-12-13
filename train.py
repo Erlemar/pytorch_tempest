@@ -56,10 +56,10 @@ def run(cfg: DictConfig) -> None:
     if cfg.general.save_pytorch_model:
         if cfg.general.save_best:
             best_path = trainer.checkpoint_callback.best_model_path  # type: ignore
-            # extract file name without folder and extension
-            save_name = best_path.split('/')[-1][:-5]
+            # extract file name without folder
+            save_name = os.path.basename(os.path.normpath(best_path))
             model = model.load_from_checkpoint(best_path, hparams=hparams, cfg=cfg, strict=False)
-            model_name = f'saved_models/{save_name}.pth'
+            model_name = f'saved_models/{save_name}'.replace('.ckpt', '.pth')
             torch.save(model.model.state_dict(), model_name)
         else:
             os.makedirs('saved_models', exist_ok=True)

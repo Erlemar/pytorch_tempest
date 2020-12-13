@@ -25,6 +25,7 @@ class EfficientNetEncoder(nn.Module):
             freeze_until(self.net, freeze_until_layer)
 
     def forward(self, x):
+        # TODO compare this and complex backbone
         output = self.net.extract_features(x)
 
         return output

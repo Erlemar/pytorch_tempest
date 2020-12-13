@@ -10,20 +10,21 @@ class BackboneModeI(nn.Module):
 
     """
 
-    def __init__(self, backbone_name: str, pretrain: bool = True, advdrop: bool = False):
+    def __init__(self, arch: str, pretrain: bool = True, advdrop: bool = False, return_only_last_output: bool = True):
         super().__init__()
-        self.backbone_name = backbone_name
+        self.arch = arch
         self.encoder = nn.ModuleList()
         self.model = None
+        self.return_only_last_output = return_only_last_output
 
-        if 'resnext' in backbone_name or 'resnet' in backbone_name or backbone_name.startswith('resnest'):
+        if 'resnext' in arch or 'resnet' in arch or arch.startswith('resnest'):
             pretrain_value: Optional[Union[bool, str]] = None
-            if backbone_name.startswith('se'):
+            if arch.startswith('se'):
                 pretrain_value = 'imagenet' if pretrain else None
             else:
                 pretrain_value = pretrain
-            model = eval(backbone_name)(pretrain=pretrain_value)
-            if backbone_name.startswith('se'):
+            model = eval(arch)(pretrain=pretrain_value)
+            if arch.startswith('se'):
                 self.encoder.append(nn.Sequential(model.layer0, model.layer1))
             else:
                 self.encoder.append(nn.Sequential(*(list(model.children())[:4]), model.layer1))
@@ -32,8 +33,8 @@ class BackboneModeI(nn.Module):
             self.encoder.append(model.layer3)
             self.encoder.append(model.layer4)
 
-        elif backbone_name.startswith('densenet'):
-            model = eval(backbone_name)(pretrain=pretrain).features
+        elif arch.startswith('densenet'):
+            model = eval(arch)(pretrain=pretrain).features
             transition1 = list(model.transition1.children())
             transition2 = list(model.transition2.children())
             transition3 = list(model.transition3.children())
@@ -42,17 +43,17 @@ class BackboneModeI(nn.Module):
             self.encoder.append(nn.Sequential(*transition2[2:], model.denseblock3, *transition3[:2]))
             self.encoder.append(nn.Sequential(*transition3[2:], model.denseblock4, nn.ReLU(True)))
 
-        elif backbone_name.startswith('efficientnet'):
+        elif arch.startswith('efficientnet'):
             if pretrain:
-                self.model = EfficientNet.from_pretrained(backbone_name, advprop=advdrop)
+                self.model = EfficientNet.from_pretrained(arch, advprop=advdrop)
             else:
-                self.model = EfficientNet.from_pretrained(backbone_name)
+                self.model = EfficientNet.from_pretrained(arch)
             # self.indexes = EFFICIENT_BLOCK_INDEXES(backbone_name)
             del self.model._avg_pooling, self.model._dropout, self.model._fc
 
     def forward(self, x):
         outputs = []
-        if 'efficientnet' in self.backbone_name:
+        if 'efficientnet' in self.arch:
             x = self.model._swish(self.model._bn0(self.model._conv_stem(x)))
             for idx, block in enumerate(self.model._blocks):
                 drop_connect_rate = self.model._global_params.drop_connect_rate
@@ -69,4 +70,8 @@ class BackboneModeI(nn.Module):
             for e in self.encoder:
                 x = e(x)
                 outputs.append(x)
+
+        if self.return_only_last_output:
+            outputs = outputs[-1]
+
         return outputs
