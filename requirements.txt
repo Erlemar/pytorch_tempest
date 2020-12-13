@@ -17,3 +17,4 @@ scikit_learn==0.23.2
 adabound==0.0.5
 adabelief-pytorch==0.1.0
 ranger-adabelief==0.1.0
+timm==0.3.1

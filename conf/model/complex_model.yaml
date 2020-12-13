@@ -2,15 +2,17 @@
 class_name: src.models.simple_model.Net
 params:
 encoder:
-  class_name: src.models.encoders.basic_encoder.BasicEncoder
+  class_name: src.models.encoders.complex_backbone.BackboneModeI
   params:
     pretrained: imagenet
     arch: resnet50
-    source: timm
-    n_layers: -2
-    freeze: False
-    to_one_channel: False
-    freeze_until_layer:
+    advdrop: False
+    return_only_last_output: True
+#    source: timm
+#    n_layers: -2
+#    freeze: False
+#    to_one_channel: False
+#    freeze_until_layer:
 decoder:
   class_name: src.models.decoders.basic_decoder.BasicDecoder
   params:
