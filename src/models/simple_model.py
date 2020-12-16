@@ -17,10 +17,8 @@ class Net(nn.Module):
         self.decoder = load_obj(cfg.model.decoder.class_name)(
             output_dimension=self.encoder.output_dimension, **cfg.model.decoder.params
         )
-        self.loss = load_obj(cfg.loss.class_name)()
 
-    def forward(self, x, targets):
+    def forward(self, x):
         out = self.encoder(x)
         logits = self.decoder(out)
-        loss = self.loss(logits, targets).view(1)
-        return logits, loss
+        return logits

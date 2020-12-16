@@ -8,4 +8,5 @@ labels_to_ohe: False
 num_workers: 0
 batch_size: 256
 pin_memory: True
+collate_fn:
 main_image_size: 256

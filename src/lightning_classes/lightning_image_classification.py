@@ -13,13 +13,14 @@ class LitImageClassification(pl.LightningModule):
         self.cfg = cfg
         self.hparams: Dict[str, float] = hparams
         self.model = load_obj(cfg.model.class_name)(cfg=cfg)
+        self.loss = load_obj(cfg.loss.class_name)()
         if not cfg.metric.params:
             self.metric = load_obj(cfg.metric.class_name)()
         else:
             self.metric = load_obj(cfg.metric.class_name)(**cfg.metric.params)
 
-    def forward(self, x, targets, *args, **kwargs):
-        return self.model(x, targets)
+    def forward(self, x, *args, **kwargs):
+        return self.model(x)
 
     def configure_optimizers(self):
         if 'decoder_lr' in self.cfg.optimizer.params.keys():
@@ -39,12 +40,19 @@ class LitImageClassification(pl.LightningModule):
         )
 
     def training_step(
-        self, batch: torch.Tensor, batch_idx: int
+        self, batch: Dict[str, torch.Tensor], batch_idx: int
     ) -> Union[int, Dict[str, Union[torch.Tensor, Dict[str, torch.Tensor]]]]:
         # TODO: one method for train/val step/epoch
         image = batch['image']
+        logits = self(image)
+
         target = batch['target']
-        logits, loss = self(image, target)
+        shuffled_target = batch.get('shuffled_target')
+        lam = batch.get('lam')
+        if shuffled_target is not None:
+            loss = self.loss(logits, (target, shuffled_target, lam)).view(1)
+        else:
+            loss = self.loss(logits, target)
         score = self.metric(logits.argmax(1), target)
         logs = {'train_loss': loss, f'train_{self.cfg.training.metric}': score}
         return {
@@ -68,11 +76,18 @@ class LitImageClassification(pl.LightningModule):
         return {'log': logs, 'progress_bar': logs}
 
     def validation_step(
-        self, batch: torch.Tensor, batch_idx: int
+        self, batch: Dict[str, torch.Tensor], batch_idx: int
     ) -> Union[int, Dict[str, Union[torch.Tensor, Dict[str, torch.Tensor]]]]:
         image = batch['image']
+        logits = self(image)
+
         target = batch['target']
-        logits, loss = self(image, target)
+        shuffled_target = batch.get('shuffled_target')
+        lam = batch.get('lam')
+        if shuffled_target is not None:
+            loss = self.loss(logits, (target, shuffled_target, lam), train=False).view(1)
+        else:
+            loss = self.loss(logits, target)
         score = self.metric(logits.argmax(1), target)
         logs = {'valid_loss': loss, f'valid_{self.cfg.training.metric}': score}
 

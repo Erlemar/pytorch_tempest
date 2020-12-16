@@ -1,0 +1,2 @@
+# @package _group_
+class_name: src.losses.losses.MixupLoss
