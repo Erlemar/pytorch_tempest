@@ -32,9 +32,10 @@ class CutMixLoss:
     ) -> torch.Tensor:
         targets1, targets2, lam = targets
         if train:
-            return lam * self.criterion(predictions, targets1) + (1 - lam) * self.criterion(predictions, targets2)
+            loss = lam * self.criterion(predictions, targets1) + (1 - lam) * self.criterion(predictions, targets2)
         else:
-            self.criterion(predictions, targets1)
+            loss = self.criterion(predictions, targets1)
+        return loss
 
 
 class MixupLoss:
@@ -47,6 +48,7 @@ class MixupLoss:
     ) -> torch.Tensor:
         targets1, targets2, lam = targets
         if train:
-            return lam * self.criterion(predictions, targets1) + (1 - lam) * self.criterion(predictions, targets2)
+            loss = lam * self.criterion(predictions, targets1) + (1 - lam) * self.criterion(predictions, targets2)
         else:
-            self.criterion(predictions, targets1)
+            loss = self.criterion(predictions, targets1)
+        return loss
