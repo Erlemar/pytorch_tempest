@@ -27,16 +27,26 @@ class CutMixLoss:
     def __init__(self, reduction: str = 'mean'):
         self.criterion = nn.CrossEntropyLoss(reduction=reduction)
 
-    def __call__(self, predictions: torch.Tensor, targets: Tuple[torch.Tensor, torch.Tensor, float]) -> torch.Tensor:
+    def __call__(
+        self, predictions: torch.Tensor, targets: Tuple[torch.Tensor, torch.Tensor, float], train: bool = True
+    ) -> torch.Tensor:
         targets1, targets2, lam = targets
-        return lam * self.criterion(predictions, targets1) + (1 - lam) * self.criterion(predictions, targets2)
+        if train:
+            return lam * self.criterion(predictions, targets1) + (1 - lam) * self.criterion(predictions, targets2)
+        else:
+            self.criterion(predictions, targets1)
 
 
 class MixupLoss:
     # https://github.com/hysts/pytorch_image_classification/blob/master/pytorch_image_classification/losses/mixup.py
     def __init__(self, reduction: str = 'mean'):
-        self.loss_func = nn.CrossEntropyLoss(reduction=reduction)
+        self.criterion = nn.CrossEntropyLoss(reduction=reduction)
 
-    def __call__(self, predictions: torch.Tensor, targets: Tuple[torch.Tensor, torch.Tensor, float]) -> torch.Tensor:
+    def __call__(
+        self, predictions: torch.Tensor, targets: Tuple[torch.Tensor, torch.Tensor, float], train: bool = True
+    ) -> torch.Tensor:
         targets1, targets2, lam = targets
-        return lam * self.loss_func(predictions, targets1) + (1 - lam) * self.loss_func(predictions, targets2)
+        if train:
+            return lam * self.criterion(predictions, targets1) + (1 - lam) * self.criterion(predictions, targets2)
+        else:
+            self.criterion(predictions, targets1)

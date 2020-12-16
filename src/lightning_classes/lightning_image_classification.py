@@ -85,7 +85,7 @@ class LitImageClassification(pl.LightningModule):
         shuffled_target = batch.get('shuffled_target')
         lam = batch.get('lam')
         if shuffled_target is not None:
-            loss = self.loss(logits, (target, shuffled_target, lam)).view(1)
+            loss = self.loss(logits, (target, shuffled_target, lam), train=False).view(1)
         else:
             loss = self.loss(logits, target)
         score = self.metric(logits.argmax(1), target)
