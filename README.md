@@ -12,16 +12,16 @@ Main frameworks used:
 The main ideas of the pipeline:
 
 * all parameters and modules are defined in configs;
-* have prepared configs for different optimizers/schedulers and so on, so it is easy to switch between them;
-* have templates for different deep learning tasks. Currently only image classification is supported;
+* prepare configs beforehand for different optimizers/schedulers and so on, so it is easy to switch between them;
+* have templates for different deep learning tasks. Currently image classification and named entity recognition are supported;
 
 Examples of running the pipeline:
-
+This will run training on MNIST (data will be downloaded):
 ```shell
 >>> python train.py --config-name mnist_config model.encoder.params.to_one_channel=True
 ```
 
-This will run training on MNIST (data will be downloaded)
+The default run:
 
 ```shell
 >>> python train.py

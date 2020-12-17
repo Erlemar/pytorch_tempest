@@ -23,6 +23,7 @@ general:
   log_code: True
   save_pytorch_model: True
   save_best: True
+  convert_to_jit: False
 
 hydra:
   run:
