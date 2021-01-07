@@ -4,4 +4,5 @@ step: epoch
 monitor: ${training.metric}
 params:
   lr_lambda: 'lambda epoch: epoch // 30'
+#  lr_lambda: 'lambda epoch: 1. / (1. + 0.05 * epoch)'
   last_epoch: -1

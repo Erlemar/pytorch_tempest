@@ -30,11 +30,11 @@ class CutMixLoss:
     def __call__(
         self, predictions: torch.Tensor, targets: Tuple[torch.Tensor, torch.Tensor, float], train: bool = True
     ) -> torch.Tensor:
-        targets1, targets2, lam = targets
         if train:
+            targets1, targets2, lam = targets
             loss = lam * self.criterion(predictions, targets1) + (1 - lam) * self.criterion(predictions, targets2)
         else:
-            loss = self.criterion(predictions, targets1)
+            loss = self.criterion(predictions, targets)
         return loss
 
 
@@ -46,9 +46,9 @@ class MixupLoss:
     def __call__(
         self, predictions: torch.Tensor, targets: Tuple[torch.Tensor, torch.Tensor, float], train: bool = True
     ) -> torch.Tensor:
-        targets1, targets2, lam = targets
         if train:
+            targets1, targets2, lam = targets
             loss = lam * self.criterion(predictions, targets1) + (1 - lam) * self.criterion(predictions, targets2)
         else:
-            loss = self.criterion(predictions, targets1)
+            loss = self.criterion(predictions, targets)
         return loss
