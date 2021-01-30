@@ -56,20 +56,20 @@ def run(cfg: DictConfig) -> None:
     dm = load_obj(cfg.datamodule.data_module_name)(hparams=hparams, cfg=cfg)
     trainer.fit(model, dm)
 
-    if cfg.general.save_pytorch_model:
-        if cfg.general.save_best:
+    if cfg.general.save_pytorch_model and cfg.general.save_best:
+        if os.path.exists(trainer.checkpoint_callback.best_model_path):  # type: ignore
             best_path = trainer.checkpoint_callback.best_model_path  # type: ignore
             # extract file name without folder
             save_name = os.path.basename(os.path.normpath(best_path))
             model = model.load_from_checkpoint(best_path, hparams=hparams, cfg=cfg, strict=False)
-            model_name = f'saved_models/{save_name}'.replace('.ckpt', '.pth')
+            model_name = f'saved_models/best_{save_name}'.replace('.ckpt', '.pth')
             torch.save(model.model.state_dict(), model_name)
         else:
             os.makedirs('saved_models', exist_ok=True)
             model_name = 'saved_models/last.pth'
             torch.save(model.model.state_dict(), model_name)
 
-    if cfg.general.convert_to_jit:
+    if cfg.general.convert_to_jit and os.path.exists(trainer.checkpoint_callback.best_model_path):  # type: ignore
         convert_to_jit(model, save_name, cfg)
 
 

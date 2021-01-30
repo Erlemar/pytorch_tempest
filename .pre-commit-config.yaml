@@ -11,7 +11,7 @@ repos:
     -   id: black
         args: [--config=pyproject.toml]
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 9feadeb
+    rev: 6fd7e2a
     hooks:
     - id: mypy
       args: [--ignore-missing-imports, --warn-no-return, --warn-redundant-casts, --disallow-incomplete-defs]
