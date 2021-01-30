@@ -13,7 +13,7 @@ The main ideas of the pipeline:
 
 * all parameters and modules are defined in configs;
 * prepare configs beforehand for different optimizers/schedulers and so on, so it is easy to switch between them;
-* have templates for different deep learning tasks. Currently image classification and named entity recognition are supported;
+* have templates for different deep learning tasks. Currently, image classification and named entity recognition are supported;
 
 Examples of running the pipeline:
 This will run training on MNIST (data will be downloaded):
@@ -27,6 +27,6 @@ The default run:
 >>> python train.py
 ```
 
-The default version of the pipeline is run on imagenette dataset. To do it downdload the data from this repository:
+The default version of the pipeline is run on imagenette dataset. To do it, download the data from this repository:
 https://github.com/fastai/imagenette
-unzip it and define path to it in conf/datamodule/image_classification.yaml path
+unzip it and define the path to it in conf/datamodule/image_classification.yaml path
