@@ -39,9 +39,7 @@ class LitImageClassification(pl.LightningModule):
             [{'scheduler': scheduler, 'interval': self.cfg.scheduler.step, 'monitor': self.cfg.scheduler.monitor}],
         )
 
-    def training_step(
-        self, batch: Dict[str, torch.Tensor], batch_idx: int
-    ) -> Union[int, Dict[str, Union[torch.Tensor, Dict[str, torch.Tensor]]]]:  # type: ignore
+    def training_step(self, batch, *args, **kwargs):  # type: ignore
         # TODO: one method for train/val step/epoch
         image = batch['image']
         logits = self(image)
@@ -75,9 +73,7 @@ class LitImageClassification(pl.LightningModule):
         logs = {'train_loss': avg_loss, f'train_{self.cfg.training.metric}': score}
         return {'log': logs, 'progress_bar': logs}
 
-    def validation_step(
-        self, batch: Dict[str, torch.Tensor], batch_idx: int
-    ) -> Union[int, Dict[str, Union[torch.Tensor, Dict[str, torch.Tensor]]]]:  # type: ignore
+    def validation_step(self, batch, *args, **kwargs):  # type: ignore
         image = batch['image']
         logits = self(image)
 
@@ -87,7 +83,7 @@ class LitImageClassification(pl.LightningModule):
         if shuffled_target is not None:
             loss = self.loss(logits, (target, shuffled_target, lam), train=False).view(1)
         else:
-            loss = self.loss(logits, target, train=False)
+            loss = self.loss(logits, target)
         score = self.metric(logits.argmax(1), target)
         logs = {'valid_loss': loss, f'valid_{self.cfg.training.metric}': score}
 

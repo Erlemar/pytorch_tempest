@@ -13,14 +13,9 @@ class BiLSTMCRF(nn.Module):
     """
 
     def __init__(
-        self,
-        tag_to_idx: Dict,
-        embeddings_dim: int = 100,
-        hidden_dim: int = 4,
-        spatial_dropout: float = 0.2,
-        **kwargs: Dict,
-    ):
-        super(BiLSTMCRF, self).__init__(**kwargs)
+        self, tag_to_idx: Dict, embeddings_dim: int = 100, hidden_dim: int = 4, spatial_dropout: float = 0.2
+    ):  # type: ignore
+        super(BiLSTMCRF, self).__init__()
         self.embedding_dim = embeddings_dim
         self.hidden_dim = hidden_dim
         self.tag_to_idx = tag_to_idx

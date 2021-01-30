@@ -9,7 +9,7 @@ from src.utils.technical_utils import load_obj
 
 
 class LitNER(pl.LightningModule):
-    def __init__(self, hparams: DictConfig, cfg: DictConfig, tag_to_idx: Dict):
+    def __init__(self, hparams: Dict[str, float], cfg: DictConfig, tag_to_idx: Dict):
         super(LitNER, self).__init__()
         self.cfg = cfg
         self.hparams: Dict[str, float] = hparams
