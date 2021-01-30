@@ -56,7 +56,7 @@ class MixupCollator:
         self.alpha = alpha
 
     def __call__(self, batch: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:  # type: ignore
-        batch = default_collate(batch)
+        batch = default_collate(batch)  # type: ignore
         batch = mixup(batch, self.alpha)
         return batch
 
@@ -74,6 +74,6 @@ class CutMixCollator:
         self.alpha = alpha
 
     def __call__(self, batch: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:  # type: ignore
-        batch = default_collate(batch)
+        batch = default_collate(batch)  # type: ignore
         batch = cutmix(batch, self.alpha)
         return batch
