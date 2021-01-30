@@ -84,7 +84,7 @@ class F1Score:
         if self.average == 'micro':
             return self.calc_f1_micro(predictions, labels)
 
-        f1_score = 0
+        f1_score = torch.tensor(0)
         for label_id in labels.unique():
             f1, true_count = self.calc_f1_count_for_label(predictions, labels, label_id)
 
