@@ -51,11 +51,6 @@ class MelanomaDataModule(pl.LightningDataModule):
         train_augs = load_augs(self.cfg['augmentation']['train']['augs'])
         valid_augs = load_augs(self.cfg['augmentation']['valid']['augs'])
 
-        # self.train_dataset = dataset_class(df=train, mode='train', img_path=self.cfg.datamodule.train_image_path,
-        #                                    transforms=train_augs)
-        #
-        # self.valid_dataset = dataset_class(df=valid, mode='valid', img_path=self.cfg.datamodule.train_image_path,
-        #                                    transforms=valid_augs)
         self.train_dataset = dataset_class(
             image_names=train['image_name'].values,
             transforms=train_augs,

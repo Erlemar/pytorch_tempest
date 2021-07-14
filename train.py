@@ -4,10 +4,10 @@ import warnings
 import hydra
 import pytorch_lightning as pl
 import torch
-from omegaconf import DictConfig
+from omegaconf import DictConfig, OmegaConf
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 
-from src.utils.technical_utils import load_obj, flatten_omegaconf, convert_to_jit
+from src.utils.technical_utils import load_obj, convert_to_jit
 from src.utils.utils import set_seed, save_useful_info
 
 warnings.filterwarnings('ignore')
@@ -17,16 +17,18 @@ def run(cfg: DictConfig) -> None:
     """
     Run pytorch-lightning model
 
+    # TODO: switch to .log API
+    # TODO: check their f1
+
     Args:
-        new_dir:
         cfg: hydra config
 
     """
     set_seed(cfg.training.seed)
     run_name = os.path.basename(os.getcwd())
-    hparams = flatten_omegaconf(cfg)
+    hparams = OmegaConf.to_container(cfg)
 
-    cfg.callbacks.model_checkpoint.params.filepath = os.getcwd() + cfg.callbacks.model_checkpoint.params.filepath
+    cfg.callbacks.model_checkpoint.params.dirpath = os.getcwd() + cfg.callbacks.model_checkpoint.params.dirpath
     callbacks = []
     for callback in cfg.callbacks.other_callbacks:
         if callback.params:
@@ -43,11 +45,12 @@ def run(cfg: DictConfig) -> None:
             loggers.append(load_obj(logger.class_name)(**logger.params))
 
     callbacks.append(EarlyStopping(**cfg.callbacks.early_stopping.params))
+    callbacks.append(ModelCheckpoint(**cfg.callbacks.model_checkpoint.params))
 
     trainer = pl.Trainer(
         logger=loggers,
         # early_stop_callback=EarlyStopping(**cfg.callbacks.early_stopping.params),
-        checkpoint_callback=ModelCheckpoint(**cfg.callbacks.model_checkpoint.params),
+        #         checkpoint_callback=ModelCheckpoint(**cfg.callbacks.model_checkpoint.params),
         callbacks=callbacks,
         **cfg.trainer,
     )
