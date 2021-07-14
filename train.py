@@ -49,7 +49,11 @@ def run(cfg: DictConfig) -> None:
     callbacks.append(EarlyStopping(**cfg.callbacks.early_stopping.params))
     callbacks.append(ModelCheckpoint(**cfg.callbacks.model_checkpoint.params))
 
-    trainer = pl.Trainer(logger=loggers, callbacks=callbacks, **cfg.trainer,)
+    trainer = pl.Trainer(
+        logger=loggers,
+        callbacks=callbacks,
+        **cfg.trainer,
+    )
 
     model = load_obj(cfg.training.lightning_module_name)(hparams=hparams, cfg=cfg)
     dm = load_obj(cfg.datamodule.data_module_name)(hparams=hparams, cfg=cfg)
