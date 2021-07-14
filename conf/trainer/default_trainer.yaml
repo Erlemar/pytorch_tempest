@@ -1,6 +1,7 @@
 # @package _group_
 gpus: 1
-distributed_backend: dp
+accelerator: dp
+num_nodes: 1
 accumulate_grad_batches: 1
 profiler: False
 max_epochs: 50
@@ -8,3 +9,4 @@ log_every_n_steps: 100
 num_sanity_val_steps: 0
 #gradient_clip_val: 0.0
 weights_summary: top
+auto_scale_batch_size: False

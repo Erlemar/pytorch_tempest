@@ -1,5 +1,6 @@
 import os
 import warnings
+from pathlib import Path
 
 import hydra
 import pytorch_lightning as pl
@@ -27,8 +28,9 @@ def run(cfg: DictConfig) -> None:
     set_seed(cfg.training.seed)
     run_name = os.path.basename(os.getcwd())
     hparams = OmegaConf.to_container(cfg)
-
-    cfg.callbacks.model_checkpoint.params.dirpath = os.getcwd() + cfg.callbacks.model_checkpoint.params.dirpath
+    cfg.callbacks.model_checkpoint.params.dirpath = Path(
+        os.getcwd(), cfg.callbacks.model_checkpoint.params.dirpath
+    ).as_posix()
     callbacks = []
     for callback in cfg.callbacks.other_callbacks:
         if callback.params:
@@ -47,13 +49,7 @@ def run(cfg: DictConfig) -> None:
     callbacks.append(EarlyStopping(**cfg.callbacks.early_stopping.params))
     callbacks.append(ModelCheckpoint(**cfg.callbacks.model_checkpoint.params))
 
-    trainer = pl.Trainer(
-        logger=loggers,
-        # early_stop_callback=EarlyStopping(**cfg.callbacks.early_stopping.params),
-        #         checkpoint_callback=ModelCheckpoint(**cfg.callbacks.model_checkpoint.params),
-        callbacks=callbacks,
-        **cfg.trainer,
-    )
+    trainer = pl.Trainer(logger=loggers, callbacks=callbacks, **cfg.trainer,)
 
     model = load_obj(cfg.training.lightning_module_name)(hparams=hparams, cfg=cfg)
     dm = load_obj(cfg.datamodule.data_module_name)(hparams=hparams, cfg=cfg)
@@ -65,7 +61,9 @@ def run(cfg: DictConfig) -> None:
             # extract file name without folder
             save_name = os.path.basename(os.path.normpath(best_path))
             model = model.load_from_checkpoint(best_path, hparams=hparams, cfg=cfg, strict=False)
-            model_name = f'saved_models/best_{save_name}'.replace('.ckpt', '.pth')
+            model_name = Path(
+                cfg.callbacks.model_checkpoint.params.dirpath, f'best_{save_name}'.replace('.ckpt', '.pth')
+            ).as_posix()
             torch.save(model.model.state_dict(), model_name)
         else:
             os.makedirs('saved_models', exist_ok=True)
