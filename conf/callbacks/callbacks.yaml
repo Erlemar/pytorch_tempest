@@ -13,7 +13,8 @@ model_checkpoint:
   params:
     monitor: ${training.metric}
     save_top_k: 3
-    filepath: /saved_models/{epoch}_{${training.metric}:.4f}
+    dirpath: /saved_models
+    filename: /{epoch}_{${training.metric}:.4f}
     mode: ${training.mode}
 
 other_callbacks:

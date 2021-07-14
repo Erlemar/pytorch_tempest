@@ -4,10 +4,10 @@ import warnings
 import hydra
 import pytorch_lightning as pl
 import torch
-from omegaconf import DictConfig
+from omegaconf import DictConfig, OmegaConf
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 
-from src.utils.technical_utils import load_obj, flatten_omegaconf
+from src.utils.technical_utils import load_obj
 from src.utils.utils import set_seed, save_useful_info
 
 warnings.filterwarnings('ignore')
@@ -23,7 +23,8 @@ def run(cfg: DictConfig) -> None:
 
     """
     set_seed(cfg.training.seed)
-    hparams = flatten_omegaconf(cfg)
+    run_name = os.path.basename(os.getcwd())
+    hparams = OmegaConf.to_container(cfg)
 
     cfg.callbacks.model_checkpoint.params.filepath = os.getcwd() + cfg.callbacks.model_checkpoint.params.filepath
     callbacks = []
@@ -37,6 +38,8 @@ def run(cfg: DictConfig) -> None:
     loggers = []
     if cfg.logging.log:
         for logger in cfg.logging.loggers:
+            if 'experiment_name' in logger.params.keys():
+                logger.params['experiment_name'] = run_name
             loggers.append(load_obj(logger.class_name)(**logger.params))
 
     callbacks.append(EarlyStopping(**cfg.callbacks.early_stopping.params))

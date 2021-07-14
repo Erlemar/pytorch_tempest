@@ -10,8 +10,8 @@ from src.utils.technical_utils import load_obj
 class LitImageClassification(pl.LightningModule):
     def __init__(self, hparams: Dict[str, float], cfg: DictConfig):
         super(LitImageClassification, self).__init__()
+        # self.hparams: Dict[str, float] = hparams
         self.cfg = cfg
-        self.hparams: Dict[str, float] = hparams
         self.model = load_obj(cfg.model.class_name)(cfg=cfg)
         self.loss = load_obj(cfg.loss.class_name)()
         if not cfg.metric.params:
@@ -52,26 +52,11 @@ class LitImageClassification(pl.LightningModule):
         else:
             loss = self.loss(logits, target)
         score = self.metric(logits.argmax(1), target)
-        logs = {'train_loss': loss, f'train_{self.cfg.training.metric}': score}
-        return {
-            'loss': loss,
-            'log': logs,
-            'progress_bar': logs,
-            'logits': logits,
-            'target': target,
-            f'train_{self.cfg.training.metric}': score,
-        }
-
-    def training_epoch_end(self, outputs):
-        avg_loss = torch.stack([x['loss'] for x in outputs]).mean()
-        y_true = torch.cat([x['target'] for x in outputs])
-        y_pred = torch.cat([x['logits'] for x in outputs])
-        score = self.metric(y_pred.argmax(1), y_true)
-
-        # score = torch.tensor(1.0, device=self.device)
-
-        logs = {'train_loss': avg_loss, f'train_{self.cfg.training.metric}': score}
-        return {'log': logs, 'progress_bar': logs}
+        self.log('loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+        self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+        self.log(
+            f'train_{self.cfg.metric.metric_name}', score, on_step=True, on_epoch=True, prog_bar=True, logger=True
+        )
 
     def validation_step(self, batch, *args, **kwargs):  # type: ignore
         image = batch['image']
@@ -85,23 +70,6 @@ class LitImageClassification(pl.LightningModule):
         else:
             loss = self.loss(logits, target)
         score = self.metric(logits.argmax(1), target)
-        logs = {'valid_loss': loss, f'valid_{self.cfg.training.metric}': score}
 
-        return {
-            'loss': loss,
-            'log': logs,
-            'progress_bar': logs,
-            'logits': logits,
-            'target': target,
-            f'valid_{self.cfg.training.metric}': score,
-        }
-
-    def validation_epoch_end(self, outputs):
-        avg_loss = torch.stack([x['loss'] for x in outputs]).mean()
-        y_true = torch.cat([x['target'] for x in outputs])
-        y_pred = torch.cat([x['logits'] for x in outputs])
-        score = self.metric(y_pred.argmax(1), y_true)
-
-        # score = torch.tensor(1.0, device=self.device)
-        logs = {'valid_loss': avg_loss, f'valid_{self.cfg.training.metric}': score, self.cfg.training.metric: score}
-        return {'valid_loss': avg_loss, 'log': logs, 'progress_bar': logs}
+        self.log('valid_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+        self.log(f'{self.cfg.training.metric}', score, on_step=True, on_epoch=True, prog_bar=True, logger=True)

@@ -1,9 +1,11 @@
 # @package _group_
 log: True
 loggers:
-  - class_name: src.utils.loggers.CsvLogger
+  - class_name: pytorch_lightning.loggers.CSVLogger
     params:
-      csv_path: logs/csv_log.csv
+      save_dir: logs/csv_log.csv
+#      name: ${general.run_name}
+      name: .
   #    - class_name: src.utils.loggers.PrintLogger
   #      params:
   #        csv_path:

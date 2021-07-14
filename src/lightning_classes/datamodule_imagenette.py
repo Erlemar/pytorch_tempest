@@ -14,7 +14,7 @@ class ImagenetteDataModule(pl.LightningDataModule):
     def __init__(self, hparams: Dict[str, float], cfg: DictConfig):
         super().__init__()
         self.cfg = cfg
-        self.hparams: Dict[str, float] = hparams
+        # self.hparams: Dict[str, float] = hparams
 
     def prepare_data(self):
         pass
