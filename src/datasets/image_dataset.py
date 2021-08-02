@@ -32,7 +32,7 @@ class ImageClassificationDataset(Dataset):
         self.img_path = img_path
         self.image_names = image_names
         # TODO rename labels and targets into one name
-        if labels:
+        if labels is not None:
             if not labels_to_ohe:
                 self.labels = np.array(labels)
             else:
