@@ -1,5 +1,6 @@
 # @package _group_
-class_name: pytorch_lightning.metrics.classification.AUROC
+class_name: torchmetrics.AUROC
 metric_name: roc_auc
+metric_name_valid: valid_${metric.metric_name}
 params:
   num_classes: ${training.n_classes}

@@ -1,0 +1,15 @@
+# @package _group_
+path: f:/melanoma_merged/512x512-dataset-melanoma/512x512-dataset-melanoma/
+n_folds: 3
+fold_n: 0
+class_name: src.datasets.image_dataset.ImageClassificationDataset
+data_module_name: src.lightning_classes.datamodule_melanoma.MelanomaDataModule
+train_path: f:/melanoma_merged/marking.csv
+labels_to_ohe: False
+num_workers: 0
+batch_size: 64
+pin_memory: True
+main_image_size: 16
+collate_fn:
+mix_params:
+  alpha: 0.4
