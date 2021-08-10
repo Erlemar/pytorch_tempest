@@ -8,9 +8,8 @@ from src.utils.technical_utils import load_obj
 
 
 class LitImageClassification(pl.LightningModule):
-    def __init__(self, hparams: Dict[str, float], cfg: DictConfig):
+    def __init__(self, cfg: DictConfig):
         super(LitImageClassification, self).__init__()
-        # self.hparams: Dict[str, float] = hparams
         self.cfg = cfg
         self.model = load_obj(cfg.model.class_name)(cfg=cfg)
         self.loss = load_obj(cfg.loss.class_name)()

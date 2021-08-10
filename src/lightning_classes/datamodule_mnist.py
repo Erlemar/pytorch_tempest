@@ -10,11 +10,10 @@ from src.datasets.mnist_dataset import MnistDataset
 
 
 class MNISTDataModule(pl.LightningDataModule):
-    def __init__(self, cfg: DictConfig, hparams: Dict[str, float], data_dir: str = './'):
+    def __init__(self, cfg: DictConfig, data_dir: str = './'):
         super().__init__()
         self.data_dir = data_dir
         self.cfg = cfg
-        self.hparams: Dict[str, float] = hparams
 
     def prepare_data(self):
         # download

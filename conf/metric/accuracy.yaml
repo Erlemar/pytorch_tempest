@@ -4,4 +4,4 @@ metric_name: accuracy
 metric_name_valid: valid_${metric.metric_name}
 params:
   threshold: 0.5
-  num_classes: 2
+  num_classes: ${training.n_classes}

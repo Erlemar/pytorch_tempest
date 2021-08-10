@@ -28,7 +28,6 @@ def run(cfg: DictConfig) -> None:
     """
     set_seed(cfg.training.seed)
     run_name = os.path.basename(os.getcwd())
-    hparams = OmegaConf.to_container(cfg)
     cfg.callbacks.model_checkpoint.params.dirpath = Path(
         os.getcwd(), cfg.callbacks.model_checkpoint.params.dirpath
     ).as_posix()
@@ -56,8 +55,8 @@ def run(cfg: DictConfig) -> None:
         **cfg.trainer,
     )
 
-    model = load_obj(cfg.training.lightning_module_name)(hparams=hparams, cfg=cfg)
-    dm = load_obj(cfg.datamodule.data_module_name)(hparams=hparams, cfg=cfg)
+    model = load_obj(cfg.training.lightning_module_name)(cfg=cfg)
+    dm = load_obj(cfg.datamodule.data_module_name)(cfg=cfg)
     trainer.fit(model, dm)
 
     if cfg.general.save_pytorch_model and cfg.general.save_best:
@@ -65,7 +64,7 @@ def run(cfg: DictConfig) -> None:
             best_path = trainer.checkpoint_callback.best_model_path  # type: ignore
             # extract file name without folder
             save_name = os.path.basename(os.path.normpath(best_path))
-            model = model.load_from_checkpoint(best_path, hparams=hparams, cfg=cfg, strict=False)
+            model = model.load_from_checkpoint(best_path, cfg=cfg, strict=False)
             model_name = Path(
                 cfg.callbacks.model_checkpoint.params.dirpath, f'best_{save_name}'.replace('.ckpt', '.pth')
             ).as_posix()
