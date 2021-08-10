@@ -11,10 +11,9 @@ from src.utils.technical_utils import load_obj
 
 
 class ImagenetteDataModule(pl.LightningDataModule):
-    def __init__(self, hparams: Dict[str, float], cfg: DictConfig):
+    def __init__(self, cfg: DictConfig):
         super().__init__()
         self.cfg = cfg
-        # self.hparams: Dict[str, float] = hparams
 
     def prepare_data(self):
         pass
