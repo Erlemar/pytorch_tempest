@@ -8,7 +8,7 @@ defaults:
   - model: bilstm_crf_simple
   - callbacks: callbacks
   - private: custom
-  - metric: f1_score
+  - metric: f1_score_mine
   - inference: basic
   - hydra/hydra_logging: colorlog
   - hydra/job_logging: colorlog

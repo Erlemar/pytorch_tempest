@@ -2,6 +2,7 @@ defaults:
   - datamodule: image_classification
   - trainer: default_trainer
   - training: default_training
+#  - logging: comet_ml
   - logging: loggers
   - optimizer: adamw
   - scheduler: plateau

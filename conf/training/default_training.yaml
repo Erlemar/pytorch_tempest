@@ -1,8 +1,8 @@
 # @package _group_
 lr: 0.0001
-metric: ${metric.metric_name_valid}
+metric: ${metric.metric.metric_name}
 mode: "max"
 seed: 666
-debug: False
+debug: True
 n_classes: 10
 lightning_module_name: src.lightning_classes.lightning_image_classification.LitImageClassification

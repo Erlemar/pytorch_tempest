@@ -12,10 +12,9 @@ from src.utils.text_utils import _generate_tag_to_idx, _generate_word_to_idx, ge
 
 
 class NerDataModule(pl.LightningDataModule):
-    def __init__(self, hparams: Dict[str, float], cfg: DictConfig):
+    def __init__(self, cfg: DictConfig):
         super().__init__()
         self.cfg = cfg
-        self.hparams: Dict[str, float] = hparams
 
     def prepare_data(self):
         pass
