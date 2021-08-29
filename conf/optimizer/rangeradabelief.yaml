@@ -1,4 +1,4 @@
-# @package _group_
+
 class_name: ranger_adabelief.RangerAdaBelief
 params:
   lr: ${training.lr}

@@ -1,4 +1,4 @@
-# @package _group_
+
 path: f:/melanoma_merged/512x512-dataset-melanoma/512x512-dataset-melanoma/
 n_folds: 3
 fold_n: 0

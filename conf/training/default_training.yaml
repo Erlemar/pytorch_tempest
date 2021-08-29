@@ -1,4 +1,4 @@
-# @package _group_
+
 lr: 0.0001
 metric: ${metric.metric.metric_name}
 mode: "max"

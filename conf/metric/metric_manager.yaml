@@ -1,4 +1,4 @@
-# @package _group_
+
 metric:
   class_name: torchmetrics.Accuracy
   metric_name: accuracy
