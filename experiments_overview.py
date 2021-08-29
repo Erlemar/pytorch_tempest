@@ -25,9 +25,6 @@ def show_scores(local_cfg: DictConfig, metric: str = 'main_score') -> None:
 
 
 if __name__ == '__main__':
-    """
-    You can use this script to see the overview of experiments, if you saved them using comet api
-    """
     parser = argparse.ArgumentParser(description='See experiment results for M5')
     parser.add_argument('--config_dir', help='main config dir', type=str, default='conf/')
     parser.add_argument('--main_config', help='main config', type=str, default='config.yaml')
