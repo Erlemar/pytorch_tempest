@@ -9,18 +9,27 @@ from src.utils.technical_utils import load_obj
 
 
 class LitNER(pl.LightningModule):
-    def __init__(self, hparams: Dict[str, float], cfg: DictConfig, tag_to_idx: Dict):
+    def __init__(self, cfg: DictConfig, tag_to_idx: Dict):
         super(LitNER, self).__init__()
         self.cfg = cfg
-        self.hparams: Dict[str, float] = hparams
         self.tag_to_idx = tag_to_idx
         self.model = load_obj(cfg.model.class_name)(
             embeddings_dim=cfg.datamodule.embeddings_dim, tag_to_idx=tag_to_idx, **cfg.model.params
         )
-        if not cfg.metric.params:
-            self.metric = load_obj(cfg.metric.class_name)()
-        else:
-            self.metric = load_obj(cfg.metric.class_name)(**cfg.metric.params)
+        self.metrics = [
+            {
+                'metric': load_obj(self.cfg.metric.metric.class_name)(**cfg.metric.metric.params),
+                'metric_name': self.cfg.metric.metric.metric_name,
+            }
+        ]
+        if 'other_metrics' in self.cfg.metric.keys():
+            for metric in self.cfg.metric.other_metrics:
+                self.metrics.append(
+                    {
+                        'metric': load_obj(metric.class_name)(**metric.params).to(self.cfg.general.device),
+                        'metric_name': metric.metric_name,
+                    }
+                )
 
     def forward(self, x, lens, *args, **kwargs):
         return self.model(x, lens)
@@ -41,10 +50,12 @@ class LitNER(pl.LightningModule):
         score, tag_seq, loss = self.model(embeds, lens, labels)
         labels = labels.flatten()
         labels = labels[labels != self.tag_to_idx['PAD']]
-        f1_score = self.metric(tag_seq, labels)
-        log = {'f1_score': f1_score, 'loss': loss.item()}
 
-        return {'loss': loss, 'log': log}
+        self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+        for metric in self.metrics:
+            score = metric['metric'](tag_seq, labels)
+            self.log(f"train_{metric['metric_name']}", score, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+        return loss
 
     def validation_step(self, batch, batch_idx):
         embeds, lens, labels = batch
@@ -52,16 +63,8 @@ class LitNER(pl.LightningModule):
         score, tag_seq, loss = self.model(embeds, lens, labels)
         labels = labels.flatten()
         labels = labels[labels != self.tag_to_idx['PAD']]
-        f1_score = self.metric(tag_seq, labels)
 
-        return {'val_loss': loss.item(), 'tag_seq': tag_seq, 'labels': labels, 'step_f1': f1_score.item()}
-
-    def validation_epoch_end(self, outputs):
-        avg_loss = np.stack([x['val_loss'] for x in outputs]).mean()
-        f1_mean = np.stack([x['step_f1'] for x in outputs]).mean()
-        y_true = torch.cat([x['labels'] for x in outputs])
-        y_pred = torch.cat([x['tag_seq'] for x in outputs])
-
-        f1_score = self.metric(y_pred.reshape(-1, 1), y_true.reshape(-1, 1))
-        tensorboard_logs = {'main_score': f1_score, 'f1_mean': f1_mean}
-        return {'val_loss': avg_loss, 'log': tensorboard_logs, 'progress_bar': tensorboard_logs}
+        self.log('valid_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+        for metric in self.metrics:
+            score = metric['metric'](tag_seq, labels)
+            self.log(f"{metric['metric_name']}", score, on_step=True, on_epoch=True, prog_bar=True, logger=True)

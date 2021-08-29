@@ -1,4 +1,5 @@
 defaults:
+  - _self_
   - datamodule: ner
   - trainer: default_trainer
   - training: ner_training
@@ -8,10 +9,10 @@ defaults:
   - model: bilstm_crf_simple
   - callbacks: callbacks
   - private: custom
-  - metric: f1_score
+  - metric: f1_score_mine
   - inference: basic
-  - hydra/hydra_logging: colorlog
-  - hydra/job_logging: colorlog
+  - override hydra/hydra_logging: colorlog
+  - override hydra/job_logging: colorlog
 
 general:
   logs_folder_name: logs

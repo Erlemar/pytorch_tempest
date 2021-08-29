@@ -3,6 +3,7 @@ from collections import Counter
 from typing import List, Union, Dict, Tuple, Any, Optional
 
 import numpy as np
+import numpy.typing as npt
 import torch.nn as nn
 from gensim.models import FastText
 from omegaconf import DictConfig
@@ -116,7 +117,7 @@ def get_word_to_idx(datasets: List) -> Dict[str, int]:
     return word_to_idx
 
 
-def get_coefs(word: str, *arr: np.array) -> Tuple[str, np.array]:
+def get_coefs(word: str, *arr: npt.ArrayLike) -> Tuple[str, npt.ArrayLike]:
     """
     Get word and coefficient from line in embeddings
     Args:
@@ -154,7 +155,7 @@ def load_embeddings(embedding_path: str, embedding_type: str = 'fasttext') -> Un
         return None
 
 
-def get_vector(embedding_type: str, embedding_index: dict, word: str) -> Optional[np.array]:
+def get_vector(embedding_type: str, embedding_index: dict, word: str) -> Optional[npt.ArrayLike]:
     """
     Return vector in relation to embedding_type parameter
     Args:
@@ -181,7 +182,7 @@ def build_matrix(
     embeddings_type: str = 'fasttext',
     max_features: int = 100000,
     embed_size: int = 300,
-) -> Tuple[np.array, int, List]:
+) -> Tuple[npt.ArrayLike, int, List]:
     """
     Create embedding matrix
 
@@ -201,7 +202,7 @@ def build_matrix(
     nb_words = min(max_features, len(word_dict))
     if embeddings_type in ['word2vec', 'glove']:
         embed_size = embed_size if embed_size is not None else len(list(embedding_index.values())[0])
-        all_embs = np.stack(embedding_index.values())
+        all_embs = np.stack(embedding_index.values())  # type: ignore
         emb_mean, emb_std = all_embs.mean(), all_embs.std()
         embedding_matrix = np.random.normal(emb_mean, emb_std, (nb_words, embed_size))
     elif embeddings_type == 'fasttext':
@@ -237,7 +238,7 @@ def pad_sequences(
     padding: str = 'post',
     truncating: str = 'post',
     value: int = 0,
-) -> np.array:
+) -> npt.ArrayLike:
     """Pad sequences to the same length.
     from Keras
 
@@ -292,7 +293,7 @@ def pad_sequences(
 
     # take the sample shape from the first non empty sequence
     # checking for consistency in the main loop below.
-    sample_shape = ()
+    sample_shape: Tuple[int, ...] = ()
     for s in sequences:
         if len(s) > 0:
             sample_shape = np.asarray(s).shape[1:]

@@ -13,10 +13,22 @@ class LitImageClassification(pl.LightningModule):
         self.cfg = cfg
         self.model = load_obj(cfg.model.class_name)(cfg=cfg)
         self.loss = load_obj(cfg.loss.class_name)()
-        if not cfg.metric.params:
-            self.metric = load_obj(cfg.metric.class_name)()
-        else:
-            self.metric = load_obj(cfg.metric.class_name)(**cfg.metric.params)
+        self.metrics = [
+            {
+                'metric': load_obj(self.cfg.metric.metric.class_name)(**cfg.metric.metric.params).to(
+                    self.cfg.general.device
+                ),
+                'metric_name': self.cfg.metric.metric.metric_name,
+            }
+        ]
+        if 'other_metrics' in self.cfg.metric.keys():
+            for metric in self.cfg.metric.other_metrics:
+                self.metrics.append(
+                    {
+                        'metric': load_obj(metric.class_name)(**metric.params).to(self.cfg.general.device),
+                        'metric_name': metric.metric_name,
+                    }
+                )
 
     def forward(self, x, *args, **kwargs):
         return self.model(x)
@@ -50,12 +62,12 @@ class LitImageClassification(pl.LightningModule):
             loss = self.loss(logits, (target, shuffled_target, lam)).view(1)
         else:
             loss = self.loss(logits, target)
-        score = self.metric(logits.argmax(1), target)
-        self.log('loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
-        self.log(
-            f'train_{self.cfg.metric.metric_name}', score, on_step=True, on_epoch=True, prog_bar=True, logger=True
-        )
+
+        for metric in self.metrics:
+            score = metric['metric'](logits, target)
+            self.log(f"train_{metric['metric_name']}", score, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+        return loss
 
     def validation_step(self, batch, *args, **kwargs):  # type: ignore
         image = batch['image']
@@ -68,7 +80,8 @@ class LitImageClassification(pl.LightningModule):
             loss = self.loss(logits, (target, shuffled_target, lam), train=False).view(1)
         else:
             loss = self.loss(logits, target)
-        score = self.metric(logits.argmax(1), target)
 
         self.log('valid_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
-        self.log(f'{self.cfg.training.metric}', score, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+        for metric in self.metrics:
+            score = metric['metric'](logits, target)
+            self.log(f"{metric['metric_name']}", score, on_step=True, on_epoch=True, prog_bar=True, logger=True)

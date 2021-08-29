@@ -37,7 +37,9 @@ class BiLSTMCRF(nn.Module):
             lens: lengths of sequences
         """
         embeds = self.embedding_dropout(embeds)
-        packed_embeds = torch.nn.utils.rnn.pack_padded_sequence(embeds, lens, batch_first=True, enforce_sorted=False)
+        packed_embeds = torch.nn.utils.rnn.pack_padded_sequence(
+            embeds, lens.cpu(), batch_first=True, enforce_sorted=False
+        )
         lstm_out, self.hidden = self.lstm(packed_embeds)
         lstm_out, _ = torch.nn.utils.rnn.pad_packed_sequence(lstm_out, batch_first=True)
         lstm_feats = self.hidden2tag2(self.hidden2tag(lstm_out.reshape(embeds.shape[0], -1, self.hidden_dim)))

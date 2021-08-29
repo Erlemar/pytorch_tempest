@@ -1,7 +1,7 @@
-# @package _group_
-class_name: torchmetrics.Accuracy
-metric_name: accuracy
-metric_name_valid: valid_${metric.metric_name}
-params:
-  threshold: 0.5
-  num_classes: ${training.n_classes}
+metric:
+  class_name: torchmetrics.Accuracy
+  metric_name: accuracy
+  params:
+    threshold: 0.5
+    num_classes: ${training.n_classes}
+    top_k: 1

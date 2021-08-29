@@ -1,4 +1,4 @@
-# @package _group_
+
 gpus: 1
 accelerator: dp
 num_nodes: 1

@@ -2,6 +2,7 @@ from typing import List, Dict, Optional
 
 import cv2
 import numpy as np
+import numpy.typing as npt
 from albumentations.core.composition import Compose
 from torch.utils.data import Dataset
 
@@ -39,7 +40,7 @@ class ImageClassificationDataset(Dataset):
                 self.labels = np.zeros((len(labels), n_classes))
                 self.labels[np.arange(len(labels)), np.array(labels)] = 1
 
-    def __getitem__(self, idx: int) -> Dict[str, np.array]:
+    def __getitem__(self, idx: int) -> Dict[str, npt.ArrayLike]:
         image_path = self.img_path + self.image_names[idx]
         image = cv2.imread(f'{image_path}', cv2.IMREAD_COLOR)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)

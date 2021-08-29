@@ -1,0 +1,22 @@
+
+metric:
+  class_name: torchmetrics.Accuracy
+  metric_name: accuracy
+  params:
+    threshold: 0.5
+    num_classes: ${training.n_classes}
+    top_k: 1
+
+other_metrics:
+  - class_name: torchmetrics.Accuracy
+    metric_name: accuracy_07
+    params:
+      threshold: 0.7
+      num_classes: ${training.n_classes}
+      top_k: 2
+
+  - class_name: torchmetrics.F1
+    metric_name: f1_score
+    params:
+      average: weighted
+      num_classes: ${training.n_classes}

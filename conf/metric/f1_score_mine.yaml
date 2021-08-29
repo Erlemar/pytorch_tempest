@@ -1,0 +1,5 @@
+metric:
+  class_name: src.metrics.f1_score.F1Score
+  metric_name: f1_score
+  params:
+    average: weighted

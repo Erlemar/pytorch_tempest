@@ -2,7 +2,7 @@ import os
 
 import pytest
 import torch
-from hydra.experimental import compose, initialize
+from hydra import compose, initialize
 
 from src.utils.technical_utils import load_obj
 

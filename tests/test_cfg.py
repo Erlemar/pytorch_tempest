@@ -1,7 +1,7 @@
 import os
 
 import pytest
-from hydra.experimental import compose, initialize
+from hydra import compose, initialize
 from omegaconf import DictConfig
 
 config_files = [f.split('.')[0] for f in os.listdir('conf') if 'yaml' in f]
