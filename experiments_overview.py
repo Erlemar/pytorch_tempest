@@ -2,7 +2,7 @@ import argparse
 
 import comet_ml
 import pandas as pd
-from hydra.experimental import initialize, compose
+from hydra import initialize, compose
 from omegaconf import DictConfig
 
 
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     parser.add_argument('--metric', help='main config', type=str, default='main_score')
     args = parser.parse_args()
 
-    initialize(config_path=args.config_dir, strict=True)
+    initialize(config_path=args.config_dir)
 
     cfg = compose(config_name=args.main_config)
 
