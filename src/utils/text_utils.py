@@ -117,7 +117,7 @@ def get_word_to_idx(datasets: List) -> Dict[str, int]:
     return word_to_idx
 
 
-def get_coefs(word: str, *arr: npt.ArrayLike) -> Tuple[str, np.array]:
+def get_coefs(word: str, *arr: npt.ArrayLike) -> Tuple[str, npt.ArrayLike]:
     """
     Get word and coefficient from line in embeddings
     Args:

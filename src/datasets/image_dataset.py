@@ -2,9 +2,9 @@ from typing import List, Dict, Optional
 
 import cv2
 import numpy as np
+import numpy.typing as npt
 from albumentations.core.composition import Compose
 from torch.utils.data import Dataset
-import numpy.typing as npt
 
 
 class ImageClassificationDataset(Dataset):
