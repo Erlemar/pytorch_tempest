@@ -1,6 +1,7 @@
 from typing import List, Dict, Tuple
 
 import numpy as np
+import numpy.typing as npt
 import torch
 from gensim.models import FastText
 from omegaconf import DictConfig
@@ -35,7 +36,7 @@ class NerDataset(Dataset):
             self.word_to_idx = word_to_idx
             self.tag_to_idx = tag_to_idx
 
-    def __getitem__(self, idx: int) -> Tuple[np.array, int, np.array]:
+    def __getitem__(self, idx: int) -> Tuple[npt.ArrayLike, int, npt.ArrayLike]:
 
         if self.preload:
             return self.tokens[idx], len(self.tokens[idx]), self.labels[idx]

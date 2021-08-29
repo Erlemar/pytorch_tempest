@@ -1,11 +1,11 @@
-from typing import Dict
+from typing import Dict, Union
 
 import numpy as np
 import torch
 from torch.utils.data.dataloader import default_collate
 
 
-def mixup(batch: Dict[str, torch.Tensor], alpha: float) -> Dict[str, torch.Tensor]:
+def mixup(batch: Dict[str, torch.Tensor], alpha: float) -> Dict[str, Union[torch.Tensor, float]]:
     image = batch['image']
     target = batch['target']
     indices = torch.randperm(image.shape[0])
@@ -18,7 +18,7 @@ def mixup(batch: Dict[str, torch.Tensor], alpha: float) -> Dict[str, torch.Tenso
     return {'image': image, 'target': target, 'shuffled_target': shuffled_target, 'lam': lam}
 
 
-def cutmix(batch: Dict[str, torch.Tensor], alpha: float) -> Dict[str, torch.Tensor]:
+def cutmix(batch: Dict[str, torch.Tensor], alpha: float) -> Dict[str, Union[torch.Tensor, float]]:
     image = batch['image']
     target = batch['target']
 
