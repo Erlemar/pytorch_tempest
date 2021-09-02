@@ -2,7 +2,7 @@
 early_stopping:
   class_name: pytorch_lightning.callbacks.EarlyStopping
   params:
-    monitor: ${training.metric}
+    monitor: valid_${training.metric}
     patience: 5
     min_delta: 0.001
     verbose: True
@@ -11,10 +11,10 @@ early_stopping:
 model_checkpoint:
   class_name: pytorch_lightning.callbacks.ModelCheckpoint
   params:
-    monitor: ${training.metric}
+    monitor: valid_${training.metric}
     save_top_k: 3
     dirpath: saved_models
-    filename: '{epoch}-{${training.metric}:.4f}'
+    filename: '{epoch}-{valid_${training.metric}:.4f}'
     mode: ${training.mode}
 
 other_callbacks:
