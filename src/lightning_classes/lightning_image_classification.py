@@ -13,22 +13,14 @@ class LitImageClassification(pl.LightningModule):
         self.cfg = cfg
         self.model = load_obj(cfg.model.class_name)(cfg=cfg)
         self.loss = load_obj(cfg.loss.class_name)()
-        self.metrics = [
-            {
-                'metric': load_obj(self.cfg.metric.metric.class_name)(**cfg.metric.metric.params).to(
-                    self.cfg.general.device
-                ),
-                'metric_name': self.cfg.metric.metric.metric_name,
-            }
-        ]
+        self.metrics = torch.nn.ModuleDict({
+            self.cfg.metric.metric.metric_name: load_obj(self.cfg.metric.metric.class_name)(**cfg.metric.metric.params)
+        })
         if 'other_metrics' in self.cfg.metric.keys():
             for metric in self.cfg.metric.other_metrics:
-                self.metrics.append(
-                    {
-                        'metric': load_obj(metric.class_name)(**metric.params).to(self.cfg.general.device),
-                        'metric_name': metric.metric_name,
-                    }
-                )
+                self.metrics.update({
+                    metric.metric_name: load_obj(metric.class_name)(**metric.params)
+                })
 
     def forward(self, x, *args, **kwargs):
         return self.model(x)
