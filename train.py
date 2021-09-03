@@ -75,6 +75,8 @@ def run(cfg: DictConfig) -> None:
             torch.save(model.model.state_dict(), model_name)
 
     if cfg.general.convert_to_jit and os.path.exists(trainer.checkpoint_callback.best_model_path):  # type: ignore
+        best_path = trainer.checkpoint_callback.best_model_path  # type: ignore
+        save_name = os.path.basename(os.path.normpath(best_path))
         convert_to_jit(model, save_name, cfg)
 
 

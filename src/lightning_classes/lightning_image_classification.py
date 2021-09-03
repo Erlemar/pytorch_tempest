@@ -13,22 +13,16 @@ class LitImageClassification(pl.LightningModule):
         self.cfg = cfg
         self.model = load_obj(cfg.model.class_name)(cfg=cfg)
         self.loss = load_obj(cfg.loss.class_name)()
-        self.metrics = [
+        self.metrics = torch.nn.ModuleDict(
             {
-                'metric': load_obj(self.cfg.metric.metric.class_name)(**cfg.metric.metric.params).to(
-                    self.cfg.general.device
-                ),
-                'metric_name': self.cfg.metric.metric.metric_name,
+                self.cfg.metric.metric.metric_name: load_obj(self.cfg.metric.metric.class_name)(
+                    **cfg.metric.metric.params
+                )
             }
-        ]
+        )
         if 'other_metrics' in self.cfg.metric.keys():
             for metric in self.cfg.metric.other_metrics:
-                self.metrics.append(
-                    {
-                        'metric': load_obj(metric.class_name)(**metric.params).to(self.cfg.general.device),
-                        'metric_name': metric.metric_name,
-                    }
-                )
+                self.metrics.update({metric.metric_name: load_obj(metric.class_name)(**metric.params)})
 
     def forward(self, x, *args, **kwargs):
         return self.model(x)
@@ -65,8 +59,8 @@ class LitImageClassification(pl.LightningModule):
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
 
         for metric in self.metrics:
-            score = metric['metric'](logits, target)
-            self.log(f"train_{metric['metric_name']}", score, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+            score = self.metrics[metric](logits, target)
+            self.log(f'train_{metric}', score, on_step=True, on_epoch=True, prog_bar=True, logger=True)
         return loss
 
     def validation_step(self, batch, *args, **kwargs):  # type: ignore
@@ -83,5 +77,5 @@ class LitImageClassification(pl.LightningModule):
 
         self.log('valid_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
         for metric in self.metrics:
-            score = metric['metric'](logits, target)
-            self.log(f"{metric['metric_name']}", score, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+            score = self.metrics[metric](logits, target)
+            self.log(f'valid_{metric}', score, on_step=True, on_epoch=True, prog_bar=True, logger=True)

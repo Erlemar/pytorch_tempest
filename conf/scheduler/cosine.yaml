@@ -1,6 +1,6 @@
 
 class_name: torch.optim.lr_scheduler.CosineAnnealingLR
 step: epoch
-monitor: ${training.metric}
+monitor: train_${training.metric}
 params:
   T_max: 10
