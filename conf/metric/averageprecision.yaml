@@ -1,0 +1,5 @@
+metric:
+  class_name: torchmetrics.AveragePrecision
+  metric_name: averageprecision
+  params:
+    num_classes: ${training.n_classes}
