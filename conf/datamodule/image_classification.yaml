@@ -11,3 +11,4 @@ main_image_size: 256
 collate_fn:
 mix_params:
   alpha: 0.4
+train_len: 1

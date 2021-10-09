@@ -1,0 +1,3 @@
+metric:
+  class_name: torch.nn.L1Loss
+  metric_name: mae
