@@ -20,5 +20,4 @@ model_checkpoint:
 other_callbacks:
   - class_name: pytorch_lightning.callbacks.LearningRateMonitor
     params:
-#  - class_name: pytorch_lightning.callbacks.GPUStatsMonitor
-#    params:
+      logging_interval: step
