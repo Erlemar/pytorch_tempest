@@ -1,0 +1,7 @@
+class_name: torch_optimizer.NovoGrad
+params:
+  lr: ${training.lr}
+  eps: 1e-8
+  weight_decay: 0
+  grad_averaging: False
+  amsgrad: False
