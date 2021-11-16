@@ -88,6 +88,7 @@ class ImagenetteDataModule(pl.LightningDataModule):
             collate_fn=load_obj(self.cfg.datamodule.collate_fn)(**self.cfg.datamodule.mix_params)
             if self.cfg.datamodule.collate_fn
             else None,
+            drop_last=True,
         )
         return train_loader
 
@@ -99,6 +100,7 @@ class ImagenetteDataModule(pl.LightningDataModule):
             pin_memory=self.cfg.datamodule.pin_memory,
             shuffle=False,
             collate_fn=None,
+            drop_last=False,
         )
 
         return valid_loader

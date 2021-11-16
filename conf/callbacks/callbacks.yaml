@@ -14,10 +14,16 @@ model_checkpoint:
     monitor: valid_${training.metric}
     save_top_k: 3
     dirpath: saved_models
-    filename: '{epoch}-{valid_${training.metric}:.4f}'
+    filename: '{epoch}-{valid_${training.metric}:.6f}'
     mode: ${training.mode}
 
 other_callbacks:
   - class_name: pytorch_lightning.callbacks.LearningRateMonitor
     params:
       logging_interval: step
+  - class_name: pytorch_lightning.callbacks.RichProgressBar
+    params:
+      leave: True
+  - class_name: pytorch_lightning.callbacks.ModelSummary
+    params:
+      max_depth: 1

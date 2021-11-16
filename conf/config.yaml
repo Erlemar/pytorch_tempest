@@ -26,10 +26,11 @@ general:
   save_pytorch_model: True
   save_best: True
   convert_to_jit: True
+  predict: True
 
 hydra:
   run:
     dir: outputs/${now:%Y-%m-%d_%H-%M-%S} #_${hydra.job.override_dirname}
   sweep:
     dir: outputs/${now:%Y-%m-%d_%H-%M-%S}
-    subdir: ${hydra.job.override_dirname}
+    subdir: ${now:%Y-%m-%d_%H-%M-%S}_${hydra.job.num}_${datamodule.fold_n}

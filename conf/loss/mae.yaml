@@ -1,0 +1,1 @@
+class_name: torch.nn.L1Loss
