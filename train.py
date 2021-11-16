@@ -19,7 +19,6 @@ def run(cfg: DictConfig) -> None:
     """
     Run pytorch-lightning model
 
-    # TODO: check their f1
 
     Args:
         cfg: hydra config
@@ -66,6 +65,7 @@ def run(cfg: DictConfig) -> None:
             best_path = trainer.checkpoint_callback.best_model_path  # type: ignore
             # extract file name without folder
             save_name = os.path.basename(os.path.normpath(best_path))
+            print(f'{save_name = }')
             model = model.load_from_checkpoint(best_path, cfg=cfg, strict=False)
             model_name = Path(
                 cfg.callbacks.model_checkpoint.params.dirpath, f'best_{save_name}'.replace('.ckpt', '.pth')
@@ -80,6 +80,8 @@ def run(cfg: DictConfig) -> None:
         best_path = trainer.checkpoint_callback.best_model_path  # type: ignore
         save_name = os.path.basename(os.path.normpath(best_path))
         convert_to_jit(model, save_name, cfg)
+
+    print(f'{run_name = }')
 
 
 @hydra.main(config_path='conf', config_name='config')

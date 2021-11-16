@@ -12,7 +12,10 @@ class LitImageClassification(pl.LightningModule):
         super(LitImageClassification, self).__init__()
         self.cfg = cfg
         self.model = load_obj(cfg.model.class_name)(cfg=cfg)
-        self.loss = load_obj(cfg.loss.class_name)()
+        if 'params' in self.cfg.loss:
+            self.loss = load_obj(cfg.loss.class_name)(**self.cfg.loss.params)
+        else:
+            self.loss = load_obj(cfg.loss.class_name)()
         self.metrics = torch.nn.ModuleDict(
             {
                 self.cfg.metric.metric.metric_name: load_obj(self.cfg.metric.metric.class_name)(
@@ -45,7 +48,6 @@ class LitImageClassification(pl.LightningModule):
         )
 
     def training_step(self, batch, *args, **kwargs):  # type: ignore
-        # TODO: one method for train/val step/epoch
         image = batch['image']
         logits = self(image)
 

@@ -5,6 +5,25 @@ import torch.functional as F
 from torch import nn
 
 
+class VentilatorLoss(nn.Module):
+    """
+    Directly optimizes the competition metric (kaggle ventilator)
+    """
+
+    def __call__(self, preds, y, u_out):
+        w = 1 - u_out
+        mae = w * (y - preds).abs()
+        mae = mae.sum(-1) / w.sum(-1)
+
+        return mae
+
+
+class MAE(nn.Module):
+    def __call__(self, preds, y, u_out):
+        # print(preds.shape, y.shape)
+        return torch.nn.L1Loss(preds, y).mean()
+
+
 class DenseCrossEntropy(nn.Module):
     # Taken from: https://www.kaggle.com/pestipeti/plant-pathology-2020-pytorch
     def __init__(self):
