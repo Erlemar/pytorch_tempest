@@ -77,7 +77,7 @@ class RMSNorm(nn.Module):
             self.bias = nn.Parameter(torch.zeros(self.dimension))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x_std = torch.sqrt(torch.mean(x ** 2, -1, keepdim=True))
+        x_std = torch.sqrt(torch.mean(x**2, -1, keepdim=True))
         x_norm = x / (x_std + self.epsilon)
         if self.is_bias:
             return self.scale * x_norm + self.bias
