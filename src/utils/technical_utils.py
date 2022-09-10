@@ -84,7 +84,7 @@ def config_to_hydra_dict(cfg: DictConfig) -> Dict:
     experiment_dict = {}
     for k, v in cfg.items():
         for k1, v1 in v.items():
-            experiment_dict[f'{k}.{k1}'] = v1
+            experiment_dict[f'{k!r}.{k1!r}'] = v1
 
     return experiment_dict
 
