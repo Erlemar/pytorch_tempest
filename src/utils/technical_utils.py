@@ -107,6 +107,5 @@ def flatten_omegaconf(d, sep='_'):
 
     recurse(d)
     obj = {k: v for k, v in obj.items() if isinstance(v, (int, float))}
-    # obj = {k: v for k, v in obj.items()}
 
     return obj
