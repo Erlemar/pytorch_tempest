@@ -1,0 +1,6 @@
+
+class_name: src.optimizers.adan.Adan
+params:
+  lr: ${training.lr}
+#    decoder_lr: 0.01
+  weight_decay: 0.02
