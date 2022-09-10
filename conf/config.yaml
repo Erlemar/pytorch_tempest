@@ -1,19 +1,18 @@
 defaults:
   - _self_
-  - datamodule: image_classification
-  - trainer: default_trainer
-  - training: default_training
-#  - logging: comet_ml
-  - logging: loggers
-  - optimizer: adamw
-  - scheduler: plateau
-  - model: simple_model
-  - callbacks: callbacks
-  - private: custom
   - augmentation: basic_augs
+  - callbacks: callbacks
+  - datamodule: image_classification
+  - inference: basic
+  - logging: loggers
   - loss: cross_entropy
   - metric: accuracy
-  - inference: basic
+  - model: simple_model
+  - optimizer: adamw
+  - private: custom
+  - scheduler: plateau
+  - trainer: default_trainer
+  - training: default_training
   - override hydra/hydra_logging: colorlog
   - override hydra/job_logging: colorlog
 
@@ -30,7 +29,7 @@ general:
 
 hydra:
   run:
-    dir: outputs/${now:%Y-%m-%d_%H-%M-%S} #_${hydra.job.override_dirname}
+    dir: outputs/${now:%Y-%m-%d_%H-%M-%S}
   sweep:
     dir: outputs/${now:%Y-%m-%d_%H-%M-%S}
     subdir: ${now:%Y-%m-%d_%H-%M-%S}_${hydra.job.num}_${datamodule.fold_n}

@@ -5,6 +5,7 @@ import shutil
 import hydra
 import numpy as np
 import torch
+import logging
 
 
 def set_seed(seed: int = 666, precision: int = 10) -> None:
@@ -15,13 +16,12 @@ def set_seed(seed: int = 666, precision: int = 10) -> None:
     torch.backends.cudnn.deterministic = True
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
-    # torch.cuda.manual_seed_all(seed)
     torch.set_printoptions(precision=precision)
 
 
 def save_useful_info() -> None:
-    print(hydra.utils.get_original_cwd())
-    print(os.getcwd())
+    logging.info(hydra.utils.get_original_cwd())
+    logging.info(os.getcwd())
     shutil.copytree(
         os.path.join(hydra.utils.get_original_cwd(), 'src'),
         os.path.join(hydra.utils.get_original_cwd(), f'{os.getcwd()}/code/src'),
