@@ -1,3 +1,4 @@
+import einops
 import torch
 import torch.functional as F
 from torch import nn
@@ -102,20 +103,20 @@ class SpatialDropout(nn.Module):
         return x
 
 
-# def softmax_windows(self, x):
-#     """
-#     https://towardsdatascience.com/swap-softmax-weighted-average-pooling-70977a69791b
-#     Take image `x`, with dimension (height, width).
-#     Convert to (2, 2, height*width/4): tile image into 2x2 blocks
-#     Take softmax over each of these blocks
-#     Convert softmax'd image back to (height, width)
-#
-#     Usage:
-#     self.pool = nn.AvgPool2d(2, 2)
-#     x = self.pool(self.softmax_windows(a) * a)
-#     """
-#     x_strided = einops.rearrange(x, 'b c (h hs) (w ws) -> b c h w (hs ws)', hs=2, ws=2)
-#     x_softmax_windows = F.softmax(x_strided, dim=-1)
-#     x_strided_softmax = einops.rearrange(x_softmax_windows, 'b c h w (hs ws) -> b c (h hs) (w ws)', hs=2, ws=2)
-#
-#     return x_strided_softmax
+def softmax_windows(self, x):
+    """
+    https://towardsdatascience.com/swap-softmax-weighted-average-pooling-70977a69791b
+    Take image `x`, with dimension (height, width).
+    Convert to (2, 2, height*width/4): tile image into 2x2 blocks
+    Take softmax over each of these blocks
+    Convert softmax'd image back to (height, width)
+
+    Usage:
+    self.pool = nn.AvgPool2d(2, 2)
+    x = self.pool(self.softmax_windows(a) * a)
+    """
+    x_strided = einops.rearrange(x, 'b c (h hs) (w ws) -> b c h w (hs ws)', hs=2, ws=2)
+    x_softmax_windows = F.softmax(x_strided, dim=-1)
+    x_strided_softmax = einops.rearrange(x_softmax_windows, 'b c h w (hs ws) -> b c (h hs) (w ws)', hs=2, ws=2)
+
+    return x_strided_softmax
