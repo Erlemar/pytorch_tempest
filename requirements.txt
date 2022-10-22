@@ -11,7 +11,7 @@ pytest==7.1.3
 numpy==1.23.3
 pandas==1.4.4
 torchvision==0.13.1
-pytorch_lightning==1.7.5
+pytorch_lightning==1.7.7
 Pillow==9.2.0
 scikit_learn==1.1.2
 adabound==0.0.5
@@ -22,3 +22,4 @@ torch-optimizer==0.3.0
 wandb==0.13.3
 einops==0.4.1
 rich==12.5.1
+torchmetrics==0.10.0
