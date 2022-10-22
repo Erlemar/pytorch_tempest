@@ -21,6 +21,11 @@ This will run training on MNIST (data will be downloaded):
 >>> python train.py --config-name mnist_config model.encoder.params.to_one_channel=True
 ```
 
+Running on MPS (M1 macbook)
+```shell
+python train.py --config-name mnist_config model.encoder.params.to_one_channel=True trainer.accelerator=mps +trainer.devices=1 optimizer=adan training.lr=0.001
+
+```
 The default run:
 
 ```shell
