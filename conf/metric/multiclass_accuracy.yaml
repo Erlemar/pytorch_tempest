@@ -1,0 +1,6 @@
+metric:
+  class_name: torchmetrics.classification.MulticlassAccuracy
+  metric_name: accuracy
+  params:
+    num_classes: ${training.n_classes}
+    top_k: 1
