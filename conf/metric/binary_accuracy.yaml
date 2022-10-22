@@ -1,0 +1,5 @@
+metric:
+  class_name: torchmetrics.classification.BinaryAccuracy
+  metric_name: accuracy
+  params:
+    threshold: 0.5
