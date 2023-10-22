@@ -2,8 +2,6 @@ import argparse
 import csv
 from typing import Dict, Optional, Union, Any
 
-from pytorch_lightning.loggers import LightningLoggerBase
-
 #
 # class CsvLogger(LightningLoggerBase):
 #     # TODO Check if works
