@@ -23,7 +23,7 @@ def load_augs(cfg: Dict) -> A.Compose:
             for small_aug in a['params']:
                 # yaml can't contain tuples, so we need to convert manually
                 params = {
-                    k: (v if not isinstance(v, omegaconf.listconfig.ListConfig) else tuple(v))
+                    k: (v if not type(v) is omegaconf.listconfig.ListConfig else tuple(v))
                     for k, v in small_aug['params'].items()
                 }
                 aug = load_obj(small_aug['class_name'])(**params)
@@ -33,7 +33,7 @@ def load_augs(cfg: Dict) -> A.Compose:
 
         else:
             params = {
-                k: (v if type(v) != omegaconf.listconfig.ListConfig else tuple(v)) for k, v in a['params'].items()
+                k: (v if not type(v) is omegaconf.listconfig.ListConfig else tuple(v)) for k, v in a['params'].items()
             }
             aug = load_obj(a['class_name'])(**params)
             augs.append(aug)
