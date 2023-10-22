@@ -69,7 +69,6 @@ def _generate_word_to_idx(
         max_words = max_count * max_words
 
     all_words = [w[0] for w in count if max_words >= w[1] >= min_words]
-    # all_words = ['<pad>', '<unk>'] + all_words
     word_to_idx = dict(zip(all_words, range(len(all_words))))
 
     return word_to_idx
