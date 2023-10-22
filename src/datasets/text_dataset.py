@@ -21,7 +21,6 @@ class NerDataset(Dataset):
             cfg: config with parameters
             tag_to_idx: mapping of tags do indexes
         """
-        # self.ner_data = ner_data
         self.data_len = len(ner_data)
         self.cfg = cfg
         self.preload = preload
