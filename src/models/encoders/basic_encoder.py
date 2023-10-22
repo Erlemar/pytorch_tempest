@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 
 import pretrainedmodels
 import timm
@@ -19,7 +19,7 @@ class BasicEncoder(nn.Module):
         n_layers: int = -2,
         freeze: bool = False,
         to_one_channel: bool = False,
-        freeze_until_layer: str = None,
+        freeze_until_layer: Optional[str] = None,
     ) -> None:
         """
         Initialize Encoder.

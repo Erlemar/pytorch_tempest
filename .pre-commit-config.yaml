@@ -6,15 +6,17 @@ repos:
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
 -   repo: https://github.com/psf/black
-    rev: '22.8.0'
+    rev: '23.7.0'
     hooks:
     -   id: black
         args: [--config=pyproject.toml]
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: fde4bb9
+    rev: 26de894
     hooks:
     - id: mypy
-      args: [--ignore-missing-imports, --warn-no-return, --warn-redundant-casts, --disallow-incomplete-defs]
+      additional_dependencies:
+        - 'numpy'
+      args: [--ignore-missing-imports, --warn-no-return, --warn-redundant-casts, --disallow-incomplete-defs, --no-namespace-packages]
 -   repo: https://gitlab.com/pycqa/flake8
     rev: '5.0.4'
     hooks:

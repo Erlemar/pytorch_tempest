@@ -1,3 +1,4 @@
+import logging
 import os
 import warnings
 from pathlib import Path
@@ -11,6 +12,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 from src.utils.technical_utils import load_obj
 from src.utils.utils import set_seed, save_useful_info
 
+logging.basicConfig(level=logging.INFO)
 warnings.filterwarnings('ignore')
 
 
@@ -78,7 +80,7 @@ def run(cfg: DictConfig) -> None:
 @hydra.main(config_path='conf', config_name='config_ner')
 def run_model(cfg: DictConfig) -> None:
     os.makedirs('logs', exist_ok=True)
-    print(OmegaConf.to_yaml(cfg))
+    logging.info(OmegaConf.to_yaml(cfg))
     if cfg.general.log_code:
         save_useful_info()
     run(cfg)

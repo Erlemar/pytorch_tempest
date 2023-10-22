@@ -35,3 +35,7 @@ The default run:
 The default version of the pipeline is run on imagenette dataset. To do it, download the data from this repository:
 https://github.com/fastai/imagenette
 unzip it and define the path to it in conf/datamodule/image_classification.yaml path
+
+https://realpython.com/python-modules-packages/
+
+https://realpython.com/lessons/package-initialization/

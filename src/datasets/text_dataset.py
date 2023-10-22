@@ -37,7 +37,6 @@ class NerDataset(Dataset):
             self.tag_to_idx = tag_to_idx
 
     def __getitem__(self, idx: int) -> Tuple[npt.ArrayLike, int, npt.ArrayLike]:
-
         if self.preload:
             return self.tokens[idx], len(self.tokens[idx]), self.labels[idx]
 

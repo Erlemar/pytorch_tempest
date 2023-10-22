@@ -2,6 +2,7 @@ metric:
   class_name: torchmetrics.Accuracy
   metric_name: accuracy
   params:
+    task: MULTICLASS
     threshold: 0.5
     num_classes: ${training.n_classes}
     top_k: 1

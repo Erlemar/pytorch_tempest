@@ -1,6 +1,6 @@
 import collections
 import random
-from typing import Any
+from typing import Any, Optional
 
 import numpy as np
 
@@ -13,7 +13,7 @@ def format_prediction_string(boxes, scores):
     return ' '.join(pred_strings)
 
 
-def freeze_until(net: Any, param_name: str = None) -> None:
+def freeze_until(net: Any, param_name: Optional[str]) -> None:
     """
     Freeze net until param_name
 

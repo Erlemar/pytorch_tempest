@@ -1,5 +1,3 @@
-from typing import Dict
-
 import pandas as pd
 import pytorch_lightning as pl
 import torch
@@ -20,7 +18,6 @@ class MelanomaDataModule(pl.LightningDataModule):
         pass
 
     def setup(self, stage=None):
-
         train = pd.read_csv(self.cfg.datamodule.train_path)
         train = train.rename(columns={'image_id': 'image_name'})
         train['image_name'] = train['image_name'] + '.jpg'
@@ -32,7 +29,6 @@ class MelanomaDataModule(pl.LightningDataModule):
             valid = valid[:1000]
 
         else:
-
             folds = list(
                 stratified_group_k_fold(y=train['target'], groups=train['patient_id'], k=self.cfg.datamodule.n_folds)
             )

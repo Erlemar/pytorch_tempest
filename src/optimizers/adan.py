@@ -96,7 +96,6 @@ class Adan(Optimizer):
 
             max_grad_norm = torch.tensor(self.defaults['max_grad_norm'], device=device)
             for group in self.param_groups:
-
                 for p in group['params']:
                     if p.grad is not None:
                         grad = p.grad

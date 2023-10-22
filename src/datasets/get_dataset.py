@@ -1,12 +1,12 @@
-# type: ignore
+from typing import Dict
+
 import albumentations as A
 import omegaconf
-from omegaconf import DictConfig
 
 from src.utils.technical_utils import load_obj
 
 
-def load_augs(cfg: DictConfig) -> A.Compose:
+def load_augs(cfg: Dict) -> A.Compose:
     """
     Load albumentations
 
