@@ -69,8 +69,7 @@ def _generate_word_to_idx(
         max_words = max_count * max_words
 
     all_words = [w[0] for w in count if max_words >= w[1] >= min_words]
-    # all_words = ['<pad>', '<unk>'] + all_words
-    word_to_idx = {k: v for k, v in zip(all_words, range(0, len(all_words)))}
+    word_to_idx = dict(zip(all_words, range(len(all_words))))
 
     return word_to_idx
 
@@ -169,9 +168,9 @@ def get_vector(embedding_type: str, embedding_index: dict, word: str) -> Optiona
 
     if embedding_type in ['word2vec', 'glove']:
         emb = embedding_index.get(word)
-    elif embedding_type == 'fasttext' and type(embedding_index) == FastText:
+    elif embedding_type == 'fasttext' and type(embedding_index) is FastText:
         emb = embedding_index[word]
-    elif embedding_type == 'fasttext' and type(embedding_index) == dict:
+    elif embedding_type == 'fasttext' and type(embedding_index) is dict:
         emb = embedding_index.get(word)
     return emb
 

@@ -1,4 +1,4 @@
-from typing import Tuple, Dict
+from typing import Tuple, Dict, Optional
 
 import torch
 from torch import nn
@@ -46,7 +46,7 @@ class BiLSTMCRF(nn.Module):
         return lstm_feats
 
     def forward(
-        self, embeds: torch.Tensor, lens: torch.Tensor, tags: torch.Tensor = None
+        self, embeds: torch.Tensor, lens: torch.Tensor, tags: Optional[torch.Tensor] = None
     ) -> Tuple[int, torch.Tensor, torch.Tensor]:
         """
         Forward

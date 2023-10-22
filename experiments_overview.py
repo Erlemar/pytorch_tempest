@@ -1,9 +1,14 @@
 import argparse
+import logging
+import warnings
 
 import comet_ml
 import pandas as pd
 from hydra import initialize, compose
 from omegaconf import DictConfig
+
+warnings.filterwarnings('ignore')
+logging.basicConfig(level=logging.INFO)
 
 
 def show_scores(local_cfg: DictConfig, metric: str = 'main_score') -> None:
@@ -20,7 +25,7 @@ def show_scores(local_cfg: DictConfig, metric: str = 'main_score') -> None:
 
     scores = pd.DataFrame(experiment_results, columns=['id', 'score'])
     scores = scores.sort_values('score')
-    print(scores.head(10))
+    logging.info(scores.head(10))
     scores.to_csv('saved_objects/scores.csv', index=False)
 
 

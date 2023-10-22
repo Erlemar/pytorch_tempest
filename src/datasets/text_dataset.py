@@ -21,7 +21,6 @@ class NerDataset(Dataset):
             cfg: config with parameters
             tag_to_idx: mapping of tags do indexes
         """
-        # self.ner_data = ner_data
         self.data_len = len(ner_data)
         self.cfg = cfg
         self.preload = preload
@@ -37,7 +36,6 @@ class NerDataset(Dataset):
             self.tag_to_idx = tag_to_idx
 
     def __getitem__(self, idx: int) -> Tuple[npt.ArrayLike, int, npt.ArrayLike]:
-
         if self.preload:
             return self.tokens[idx], len(self.tokens[idx]), self.labels[idx]
 

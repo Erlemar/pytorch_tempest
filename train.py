@@ -1,4 +1,4 @@
-import comet_ml
+import logging
 import os
 import warnings
 from pathlib import Path
@@ -13,6 +13,7 @@ from src.utils.technical_utils import load_obj, convert_to_jit
 from src.utils.utils import set_seed, save_useful_info
 
 warnings.filterwarnings('ignore')
+logging.basicConfig(level=logging.INFO)
 
 
 def run(cfg: DictConfig) -> None:
@@ -65,8 +66,8 @@ def run(cfg: DictConfig) -> None:
             best_path = trainer.checkpoint_callback.best_model_path  # type: ignore
             # extract file name without folder
             save_name = os.path.basename(os.path.normpath(best_path))
-            print(f'{save_name = }')
-            model = model.load_from_checkpoint(best_path, cfg=cfg, strict=False)
+            logging.info(f'{save_name = }')
+            model = load_obj(cfg.training.lightning_module_name).load_from_checkpoint(best_path, cfg=cfg, strict=False)
             model_name = Path(
                 cfg.callbacks.model_checkpoint.params.dirpath, f'best_{save_name}'.replace('.ckpt', '.pth')
             ).as_posix()
@@ -81,13 +82,13 @@ def run(cfg: DictConfig) -> None:
         save_name = os.path.basename(os.path.normpath(best_path))
         convert_to_jit(model, save_name, cfg)
 
-    print(f'{run_name = }')
+    logging.info(f'{run_name = }')
 
 
 @hydra.main(config_path='conf', config_name='config')
 def run_model(cfg: DictConfig) -> None:
     os.makedirs('logs', exist_ok=True)
-    print(OmegaConf.to_yaml(cfg))
+    logging.info(OmegaConf.to_yaml(cfg))
     if cfg.general.log_code:
         save_useful_info()
     run(cfg)
