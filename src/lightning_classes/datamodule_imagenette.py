@@ -85,9 +85,11 @@ class ImagenetteDataModule(pl.LightningDataModule):
             num_workers=self.cfg.datamodule.num_workers,
             pin_memory=self.cfg.datamodule.pin_memory,
             shuffle=True,
-            collate_fn=load_obj(self.cfg.datamodule.collate_fn)(**self.cfg.datamodule.mix_params)
-            if self.cfg.datamodule.collate_fn
-            else None,
+            collate_fn=(
+                load_obj(self.cfg.datamodule.collate_fn)(**self.cfg.datamodule.mix_params)
+                if self.cfg.datamodule.collate_fn
+                else None
+            ),
             drop_last=True,
         )
         return train_loader
