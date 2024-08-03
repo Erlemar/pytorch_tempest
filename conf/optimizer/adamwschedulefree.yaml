@@ -1,0 +1,7 @@
+
+class_name: schedulefree.AdamWScheduleFree
+params:
+  lr: ${training.lr}
+  weight_decay: 0
+  warmup_steps: 0
+  r: 0

@@ -24,6 +24,10 @@ This will run training on MNIST (data will be downloaded):
 Running on MPS (M1 macbook)
 ```shell
 python train.py --config-name mnist_config model.encoder.params.to_one_channel=True trainer.accelerator=mps +trainer.devices=1 optimizer=adan training.lr=0.001
+```
+Running on MPS (M1 macbook) with schedule free optimizer https://github.com/facebookresearch/schedule_free/tree/main
+```shell
+python train.py --config-name mnist_config model.encoder.params.to_one_channel=True trainer.accelerator=mps trainer.devices=1 optimizer=adamwschedulefree training.lr=0.001 scheduler.params.patience=100
 
 ```
 The default run:
