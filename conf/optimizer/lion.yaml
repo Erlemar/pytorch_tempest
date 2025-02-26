@@ -1,4 +1,4 @@
-class_name: torch_optimizer.Lion
+class_name: lion_pytorch.Lion
 params:
   lr: ${training.lr}
   weight_decay: 0.0001
