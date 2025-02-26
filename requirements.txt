@@ -19,6 +19,7 @@ adabelief-pytorch==0.2.1
 ranger-adabelief==0.1.0
 timm==0.9.8
 torch-optimizer==0.3.0
+lion-pytorch==0.2.3
 wandb==0.15.12
 einops==0.7.0
 rich==13.6.0
