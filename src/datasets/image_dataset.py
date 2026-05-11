@@ -41,9 +41,9 @@ class ImageClassificationDataset(Dataset):
     def __getitem__(self, idx: int) -> dict[str, npt.ArrayLike]:
         image_path = self.img_path + self.image_names[idx]
         image = cv2.imread(f'{image_path}', cv2.IMREAD_COLOR)
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         if image is None:
             raise FileNotFoundError(image_path)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         target = self.labels[idx]
 
         img = self.transforms(image=image)['image']
