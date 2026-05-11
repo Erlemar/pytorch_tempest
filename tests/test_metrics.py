@@ -20,4 +20,4 @@ def test_f1score_metric(average: str) -> None:
 
     f1_pred = f1_score(labels_numpy, predictions_numpy, average=average)
 
-    assert np.isclose(my_pred.item(), f1_pred.item())
+    assert np.isclose(my_pred.item(), float(f1_pred))
