@@ -1,20 +1,65 @@
-[tool.black]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pytorch-tempest"
+version = "0.1.0"
+description = "PyTorch training pipeline with Hydra and Lightning"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "albumentations==2.0.8",
+    "comet_ml==3.57.4",
+    "torch==2.11.0",
+    "omegaconf==2.3.0",
+    "pytorch_toolbelt==0.8.0",
+    "hydra_core==1.3.2",
+    "hydra_colorlog==1.2.0",
+    "pytest==9.0.3",
+    "numpy==2.4.4",
+    "pandas==3.0.2",
+    "torchvision==0.26.0",
+    "pytorch_lightning==2.6.1",
+    "Pillow==12.2.0",
+    "scikit_learn==1.8.0",
+    "timm==1.0.27",
+    "torch-optimizer==0.3.0",
+    "lion-pytorch==0.2.4",
+    "wandb==0.26.1",
+    "einops==0.8.2",
+    "rich==15.0.0",
+    "torchmetrics==1.9.0",
+    "schedulefree==1.4.1",
+    "gensim==4.4.0",
+    "tensorboard==2.20.0",
+    "pretrainedmodels==0.7.4",
+    "efficientnet_pytorch==0.7.1",
+    "adabound==0.0.5",
+    "adabelief-pytorch==0.2.1",
+    "ranger-adabelief==0.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.15.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.ruff]
 line-length = 119
-skip-string-normalization = true
-target-version = ['py35', 'py36', 'py37', 'py38']
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-  | outputs
-)/
-'''
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B", "C4", "PT"]
+ignore = ["B007"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+split-on-trailing-comma = false
+
+[tool.ruff.format]
+quote-style = "single"
+skip-magic-trailing-comma = true

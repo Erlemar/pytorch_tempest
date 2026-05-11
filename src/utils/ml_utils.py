@@ -1,19 +1,19 @@
 import collections
 import random
-from typing import Any, Optional
+from typing import Any
 
 import numpy as np
 
 
 def format_prediction_string(boxes, scores):
     pred_strings = []
-    for s, b in zip(scores, boxes.astype(int)):
+    for s, b in zip(scores, boxes.astype(int), strict=False):
         pred_strings.append(f'{s:.4f} {b[0]} {b[1]} {b[2] - b[0]} {b[3] - b[1]}')
 
     return ' '.join(pred_strings)
 
 
-def freeze_until(net: Any, param_name: Optional[str]) -> None:
+def freeze_until(net: Any, param_name: str | None) -> None:
     """
     Freeze net until param_name
 
@@ -40,7 +40,7 @@ def stratified_group_k_fold(y, groups, k, seed=None):
     labels_num = np.max(y) + 1
     y_counts_per_group = collections.defaultdict(lambda: np.zeros(labels_num))
     y_distr = collections.Counter()
-    for label, g in zip(y, groups):
+    for label, g in zip(y, groups, strict=False):
         y_counts_per_group[g][label] += 1
         y_distr[label] += 1
 
@@ -82,4 +82,4 @@ def stratified_group_k_fold(y, groups, k, seed=None):
 
 
 def collate_fn(batch):
-    return tuple(zip(*batch))
+    return tuple(zip(*batch, strict=False))

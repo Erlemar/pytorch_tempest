@@ -2,7 +2,7 @@ import torch.nn.functional as F
 from pytorch_toolbelt.modules.activations import Mish
 from torch import nn
 
-from src.models.layers.layers import RMSNorm, GeM
+from src.models.layers.layers import GeM, RMSNorm
 
 
 class BasicDecoder(nn.Module):

@@ -7,10 +7,10 @@ import hydra
 import pytorch_lightning as pl
 import torch
 from omegaconf import DictConfig, OmegaConf
-from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
+from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 
 from src.utils.technical_utils import load_obj
-from src.utils.utils import set_seed, save_useful_info
+from src.utils.utils import save_useful_info, set_seed
 
 logging.basicConfig(level=logging.INFO)
 warnings.filterwarnings('ignore')
@@ -49,11 +49,7 @@ def run(cfg: DictConfig) -> None:
     callbacks.append(EarlyStopping(**cfg.callbacks.early_stopping.params))
     callbacks.append(ModelCheckpoint(**cfg.callbacks.model_checkpoint.params))
 
-    trainer = pl.Trainer(
-        logger=loggers,
-        callbacks=callbacks,
-        **cfg.trainer,
-    )
+    trainer = pl.Trainer(logger=loggers, callbacks=callbacks, **cfg.trainer)
 
     dm = load_obj(cfg.datamodule.data_module_name)(cfg=cfg)
     dm.setup()

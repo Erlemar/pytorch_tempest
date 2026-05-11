@@ -1,5 +1,3 @@
-from typing import Optional
-
 from efficientnet_pytorch import EfficientNet
 from torch import nn
 
@@ -8,7 +6,7 @@ from src.utils.ml_utils import freeze_until
 
 class EfficientNetEncoder(nn.Module):
     def __init__(
-        self, arch: str = 'efficientnet-b0', freeze: bool = False, freeze_until_layer: Optional[str] = None
+        self, arch: str = 'efficientnet-b0', freeze: bool = False, freeze_until_layer: str | None = None
     ) -> None:
         """
         Initialize Encoder.

@@ -2,6 +2,12 @@ lr: 0.0001
 metric: ${metric.metric.metric_name}_epoch
 mode: "max"
 seed: 666
-debug: True
+debug: true
 n_classes: 10
 lightning_module_name: src.lightning_classes.lightning_image_classification.LitImageClassification
+compile: false
+compile_mode: default
+strategy: auto
+fsdp_sharding_strategy: FULL_SHARD
+fsdp_mixed_precision: true
+fsdp_auto_wrap: true

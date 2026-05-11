@@ -56,13 +56,18 @@ class Adan(Optimizer):
             raise ValueError(f'Invalid beta parameter at index 1: {betas[1]}')
         if not 0.0 <= betas[2] < 1.0:
             raise ValueError(f'Invalid beta parameter at index 2: {betas[2]}')
-        defaults = dict(
-            lr=lr, betas=betas, eps=eps, weight_decay=weight_decay, max_grad_norm=max_grad_norm, no_prox=no_prox
-        )
-        super(Adan, self).__init__(params, defaults)
+        defaults = {
+            'lr': lr,
+            'betas': betas,
+            'eps': eps,
+            'weight_decay': weight_decay,
+            'max_grad_norm': max_grad_norm,
+            'no_prox': no_prox,
+        }
+        super().__init__(params, defaults)
 
     def __setstate__(self, state):
-        super(Adan, self).__setstate__(state)
+        super().__setstate__(state)
         for group in self.param_groups:
             group.setdefault('no_prox', False)
 
@@ -87,6 +92,7 @@ class Adan(Optimizer):
         """
         Perform a single optimization step.
         """
+        loss = None
         if closure is not None:
             with torch.enable_grad():
                 loss = closure()
@@ -147,7 +153,7 @@ class Adan(Optimizer):
                 exp_avg_sq.mul_(beta3).addcmul_(update, update, value=1 - beta3)  # n_t
 
                 denom = ((exp_avg_sq).sqrt() / math.sqrt(bias_correction3)).add_(group['eps'])
-                update = ((exp_avg / bias_correction1 + beta2 * exp_avg_diff / bias_correction2)).div_(denom)
+                update = (exp_avg / bias_correction1 + beta2 * exp_avg_diff / bias_correction2).div_(denom)
 
                 if group['no_prox']:
                     p.data.mul_(1 - group['lr'] * group['weight_decay'])
@@ -157,3 +163,5 @@ class Adan(Optimizer):
                     p.data.div_(1 + group['lr'] * group['weight_decay'])
 
                 state['pre_grad'] = copy_grad
+
+        return loss

@@ -1,5 +1,3 @@
-from typing import Dict, Union
-
 import pytorch_lightning as pl
 import torch
 from omegaconf import DictConfig
@@ -9,9 +7,11 @@ from src.utils.technical_utils import load_obj
 
 class LitImageClassification(pl.LightningModule):
     def __init__(self, cfg: DictConfig):
-        super(LitImageClassification, self).__init__()
+        super().__init__()
         self.cfg = cfg
         self.model = load_obj(cfg.model.class_name)(cfg=cfg)
+        if cfg.training.compile:
+            self.model = torch.compile(self.model, mode=cfg.training.compile_mode)
         if 'params' in self.cfg.loss:
             self.loss = load_obj(cfg.loss.class_name)(**self.cfg.loss.params)
         else:
@@ -33,8 +33,8 @@ class LitImageClassification(pl.LightningModule):
     def configure_optimizers(self):
         if 'decoder_lr' in self.cfg.optimizer.params.keys():
             params = [
-                {'params': self.model.decoder.parameters(), 'lr': self.cfg.optimizer.params.lr},
-                {'params': self.model.encoder.parameters(), 'lr': self.cfg.optimizer.params.decoder_lr},
+                {'params': self.model.encoder.parameters(), 'lr': self.cfg.optimizer.params.lr},
+                {'params': self.model.decoder.parameters(), 'lr': self.cfg.optimizer.params.decoder_lr},
             ]
             optimizer = load_obj(self.cfg.optimizer.class_name)(params)
 

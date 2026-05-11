@@ -1,6 +1,5 @@
 import glob
 import os
-from typing import Dict
 
 import pytorch_lightning as pl
 import torch

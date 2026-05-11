@@ -1,3 +1,4 @@
+import logging
 import os
 import random
 import shutil
@@ -5,7 +6,6 @@ import shutil
 import hydra
 import numpy as np
 import torch
-import logging
 
 
 def set_seed(seed: int = 666, precision: int = 10) -> None:

@@ -4,7 +4,7 @@ import warnings
 
 import comet_ml
 import pandas as pd
-from hydra import initialize, compose
+from hydra import compose, initialize
 from omegaconf import DictConfig
 
 warnings.filterwarnings('ignore')

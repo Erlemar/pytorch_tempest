@@ -1,7 +1,5 @@
-from typing import Tuple
-
 import torch
-import torch.functional as F
+import torch.nn.functional as F
 from torch import nn
 
 
@@ -19,15 +17,14 @@ class VentilatorLoss(nn.Module):
 
 
 class MAE(nn.Module):
-    def __call__(self, preds, y, u_out):
-        # print(preds.shape, y.shape)
-        return torch.nn.L1Loss(preds, y).mean()
+    def __call__(self, preds: torch.Tensor, y: torch.Tensor, u_out: torch.Tensor) -> torch.Tensor:
+        return torch.nn.functional.l1_loss(preds, y)
 
 
 class DenseCrossEntropy(nn.Module):
     # Taken from: https://www.kaggle.com/pestipeti/plant-pathology-2020-pytorch
     def __init__(self):
-        super(DenseCrossEntropy, self).__init__()
+        super().__init__()
 
     def forward(self, logits, labels):
         logits = logits.float()
@@ -47,7 +44,7 @@ class CutMixLoss:
         self.criterion = nn.CrossEntropyLoss(reduction=reduction)
 
     def __call__(
-        self, predictions: torch.Tensor, targets: Tuple[torch.Tensor, torch.Tensor, float], train: bool = True
+        self, predictions: torch.Tensor, targets: tuple[torch.Tensor, torch.Tensor, float], train: bool = True
     ) -> torch.Tensor:
         if train:
             targets1, targets2, lam = targets
@@ -63,7 +60,7 @@ class MixupLoss:
         self.criterion = nn.CrossEntropyLoss(reduction=reduction)
 
     def __call__(
-        self, predictions: torch.Tensor, targets: Tuple[torch.Tensor, torch.Tensor, float], train: bool = True
+        self, predictions: torch.Tensor, targets: tuple[torch.Tensor, torch.Tensor, float], train: bool = True
     ) -> torch.Tensor:
         if train:
             targets1, targets2, lam = targets

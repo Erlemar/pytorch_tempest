@@ -1,11 +1,9 @@
-from typing import Dict, Union
-
 import numpy as np
 import torch
 from torch.utils.data.dataloader import default_collate
 
 
-def mixup(batch: Dict[str, torch.Tensor], alpha: float) -> Dict[str, Union[torch.Tensor, float]]:
+def mixup(batch: dict[str, torch.Tensor], alpha: float) -> dict[str, torch.Tensor | float]:
     image = batch['image']
     target = batch['target']
     indices = torch.randperm(image.shape[0])
@@ -18,7 +16,7 @@ def mixup(batch: Dict[str, torch.Tensor], alpha: float) -> Dict[str, Union[torch
     return {'image': image, 'target': target, 'shuffled_target': shuffled_target, 'lam': lam}
 
 
-def cutmix(batch: Dict[str, torch.Tensor], alpha: float) -> Dict[str, Union[torch.Tensor, float]]:
+def cutmix(batch: dict[str, torch.Tensor], alpha: float) -> dict[str, torch.Tensor | float]:
     image = batch['image']
     target = batch['target']
 
@@ -55,7 +53,7 @@ class MixupCollator:
     def __init__(self, alpha: float = 0.4):
         self.alpha = alpha
 
-    def __call__(self, batch: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:  # type: ignore
+    def __call__(self, batch: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:  # type: ignore
         batch = default_collate(batch)  # type: ignore
         batch = mixup(batch, self.alpha)  # type: ignore
         return batch
@@ -73,7 +71,7 @@ class CutMixCollator:
     def __init__(self, alpha: float = 0.4):
         self.alpha = alpha
 
-    def __call__(self, batch: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:  # type: ignore
+    def __call__(self, batch: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:  # type: ignore
         batch = default_collate(batch)  # type: ignore
         batch = cutmix(batch, self.alpha)  # type: ignore
         return batch

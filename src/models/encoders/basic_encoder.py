@@ -1,5 +1,3 @@
-from typing import Union, Optional
-
 import pretrainedmodels
 import timm
 import torch
@@ -15,11 +13,11 @@ class BasicEncoder(nn.Module):
         self,
         arch: str = 'resnet18',
         source: str = 'pretrainedmodels',
-        pretrained: Union[str, bool] = 'imagenet',
+        pretrained: str | bool = 'imagenet',
         n_layers: int = -2,
         freeze: bool = False,
         to_one_channel: bool = False,
-        freeze_until_layer: Optional[str] = None,
+        freeze_until_layer: str | None = None,
     ) -> None:
         """
         Initialize Encoder.

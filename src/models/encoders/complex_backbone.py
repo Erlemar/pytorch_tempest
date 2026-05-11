@@ -1,5 +1,3 @@
-from typing import Optional, Union
-
 from efficientnet_pytorch import EfficientNet
 from torch import nn
 
@@ -18,7 +16,7 @@ class BackboneModeI(nn.Module):
         self.return_only_last_output = return_only_last_output
 
         if 'resnext' in arch or 'resnet' in arch or arch.startswith('resnest'):
-            pretrain_value: Optional[Union[bool, str]] = None
+            pretrain_value: bool | str | None = None
             if arch.startswith('se'):
                 pretrain_value = 'imagenet' if pretrain else None
             else:
