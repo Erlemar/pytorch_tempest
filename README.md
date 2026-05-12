@@ -15,7 +15,6 @@ The main ideas of the pipeline:
 * prepare configs beforehand for different optimizers/schedulers and so on, so it is easy to switch between them;
 * have templates for different deep learning tasks. Currently, image classification and named entity recognition are supported;
 
-
 ## Setup
 
 Recommended (with [uv](https://docs.astral.sh/uv/)):
