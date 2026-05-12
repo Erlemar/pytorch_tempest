@@ -32,7 +32,7 @@ def gem(x, p=3, eps=1e-6):
 
 class GeM(nn.Module):
     def __init__(self, p=3, eps=1e-6):
-        super(GeM, self).__init__()
+        super().__init__()
         self.p = Parameter(torch.ones(1) * p)
         self.eps = eps
 
@@ -93,7 +93,7 @@ class SpatialDropout(nn.Module):
     """
 
     def __init__(self, p: float):
-        super(SpatialDropout, self).__init__()
+        super().__init__()
         self.spatial_dropout = nn.Dropout2d(p=p)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:

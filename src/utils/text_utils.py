@@ -1,6 +1,6 @@
 import pickle
 from collections import Counter
-from typing import List, Union, Dict, Tuple, Any, Optional
+from typing import Any
 
 import numpy as np
 import numpy.typing as npt
@@ -11,7 +11,7 @@ from omegaconf import DictConfig
 from src.utils.technical_utils import load_obj
 
 
-def _generate_tag_to_idx(cfg: DictConfig, entities_names: List) -> dict:
+def _generate_tag_to_idx(cfg: DictConfig, entities_names: list) -> dict:
     """
     Generate tag-idx vocab
     Args:
@@ -20,7 +20,7 @@ def _generate_tag_to_idx(cfg: DictConfig, entities_names: List) -> dict:
     Returns:
         tag-idx vocab
     """
-    tag_to_idx: Dict = {}
+    tag_to_idx: dict = {}
     for ind, entity in enumerate(entities_names):
         if cfg.datamodule.params.use_bulio_tokens:
             tag_to_idx[f'B-{entity}'] = len(tag_to_idx)
@@ -36,12 +36,12 @@ def _generate_tag_to_idx(cfg: DictConfig, entities_names: List) -> dict:
 
 
 def _generate_word_to_idx(
-    data: List,
+    data: list,
     use_pad_token: bool = False,
     use_unk_token: bool = False,
-    min_words: Union[int, float] = 0.0,
-    max_words: Union[int, float] = 1.0,
-) -> Dict[str, int]:
+    min_words: int | float = 0.0,
+    max_words: int | float = 1.0,
+) -> dict[str, int]:
     """
     Generate word-idx vocab
     Args:
@@ -69,12 +69,12 @@ def _generate_word_to_idx(
         max_words = max_count * max_words
 
     all_words = [w[0] for w in count if max_words >= w[1] >= min_words]
-    word_to_idx = dict(zip(all_words, range(len(all_words))))
+    word_to_idx = dict(zip(all_words, range(len(all_words)), strict=False))
 
     return word_to_idx
 
 
-def get_vectorizer(cfg: DictConfig, word_to_idx: Dict) -> nn.Module:
+def get_vectorizer(cfg: DictConfig, word_to_idx: dict) -> nn.Module:
     """
     Get model
 
@@ -97,7 +97,7 @@ def get_vectorizer(cfg: DictConfig, word_to_idx: Dict) -> nn.Module:
     return vectorizer
 
 
-def get_word_to_idx(datasets: List) -> Dict[str, int]:
+def get_word_to_idx(datasets: list) -> dict[str, int]:
     """
     Get dictionary with words and indexes
     Args:
@@ -106,7 +106,7 @@ def get_word_to_idx(datasets: List) -> Dict[str, int]:
     Returns:
         Dict with words and indexes
     """
-    word_to_idx: Dict[str, int] = {'пропущено': 1}
+    word_to_idx: dict[str, int] = {'пропущено': 1}
     for dataset in datasets:
         for claim in dataset:
             for word in claim['text']:
@@ -116,7 +116,7 @@ def get_word_to_idx(datasets: List) -> Dict[str, int]:
     return word_to_idx
 
 
-def get_coefs(word: str, *arr: npt.ArrayLike) -> Tuple[str, npt.ArrayLike]:
+def get_coefs(word: str, *arr: npt.ArrayLike) -> tuple[str, npt.ArrayLike]:
     """
     Get word and coefficient from line in embeddings
     Args:
@@ -129,7 +129,7 @@ def get_coefs(word: str, *arr: npt.ArrayLike) -> Tuple[str, npt.ArrayLike]:
     return word, np.asarray(arr, dtype='float32')
 
 
-def load_embeddings(embedding_path: str, embedding_type: str = 'fasttext') -> Union[Dict, Any]:
+def load_embeddings(embedding_path: str, embedding_type: str = 'fasttext') -> dict | Any:
     """
     Load embeddings into dictionary
     Args:
@@ -142,11 +142,11 @@ def load_embeddings(embedding_path: str, embedding_type: str = 'fasttext') -> Un
         with open(embedding_path, 'rb') as vec_f:
             return pickle.load(vec_f)
     elif embedding_type == 'word2vec':
-        with open(embedding_path, 'r', encoding='utf-8', errors='ignore') as f:
+        with open(embedding_path, encoding='utf-8', errors='ignore') as f:
             next(f)
             return dict(get_coefs(*line.strip().split(' ')) for line in f)
     elif embedding_type == 'glove':
-        with open(embedding_path, 'r', encoding='utf-8', errors='ignore') as f:
+        with open(embedding_path, encoding='utf-8', errors='ignore') as f:
             return dict(get_coefs(*line.strip().split(' ')) for line in f)
     elif embedding_type == 'fasttext':
         return FastText.load(embedding_path)
@@ -154,7 +154,7 @@ def load_embeddings(embedding_path: str, embedding_type: str = 'fasttext') -> Un
         return None
 
 
-def get_vector(embedding_type: str, embedding_index: dict, word: str) -> Optional[npt.ArrayLike]:
+def get_vector(embedding_type: str, embedding_index: dict, word: str) -> npt.ArrayLike | None:
     """
     Return vector in relation to embedding_type parameter
     Args:
@@ -176,12 +176,12 @@ def get_vector(embedding_type: str, embedding_index: dict, word: str) -> Optiona
 
 
 def build_matrix(
-    word_dict: Dict,
+    word_dict: dict,
     embedding_path: str = '',
     embeddings_type: str = 'fasttext',
     max_features: int = 100000,
     embed_size: int = 300,
-) -> Tuple[npt.ArrayLike, int, List]:
+) -> tuple[npt.ArrayLike, int, list]:
     """
     Create embedding matrix
 
@@ -231,8 +231,8 @@ def build_matrix(
 
 
 def pad_sequences(
-    sequences: List,
-    maxlen: Optional[int],
+    sequences: list,
+    maxlen: int | None,
     dtype: str = 'int32',
     padding: str = 'post',
     truncating: str = 'post',
@@ -284,15 +284,15 @@ def pad_sequences(
     for x in sequences:
         try:
             lengths.append(len(x))
-        except TypeError:
-            raise ValueError('`sequences` must be a list of iterables. ' 'Found non-iterable: ' + str(x))
+        except TypeError as e:
+            raise ValueError('`sequences` must be a list of iterables. Found non-iterable: ' + str(x)) from e
 
     if maxlen is None:
         maxlen = np.max(lengths)
 
     # take the sample shape from the first non empty sequence
     # checking for consistency in the main loop below.
-    sample_shape: Tuple[int, ...] = ()
+    sample_shape: tuple[int, ...] = ()
     for s in sequences:
         if len(s) > 0:
             sample_shape = np.asarray(s).shape[1:]
@@ -307,7 +307,7 @@ def pad_sequences(
         elif truncating == 'post':
             trunc = s[:maxlen]
         else:
-            raise ValueError(f'Truncating type "{truncating}" ' 'not understood')
+            raise ValueError(f'Truncating type "{truncating}" not understood')
 
         # check `trunc` has expected shape
         trunc = np.asarray(trunc, dtype=dtype)

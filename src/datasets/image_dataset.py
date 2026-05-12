@@ -1,5 +1,3 @@
-from typing import List, Dict, Optional
-
 import cv2
 import numpy as np
 import numpy.typing as npt
@@ -10,9 +8,9 @@ from torch.utils.data import Dataset
 class ImageClassificationDataset(Dataset):
     def __init__(
         self,
-        image_names: List,
+        image_names: list,
         transforms: Compose,
-        labels: Optional[List[int]],
+        labels: list[int] | None,
         img_path: str = '',
         mode: str = 'train',
         labels_to_ohe: bool = False,
@@ -40,12 +38,12 @@ class ImageClassificationDataset(Dataset):
                 self.labels = np.zeros((len(labels), n_classes))
                 self.labels[np.arange(len(labels)), np.array(labels)] = 1
 
-    def __getitem__(self, idx: int) -> Dict[str, npt.ArrayLike]:
+    def __getitem__(self, idx: int) -> dict[str, npt.ArrayLike]:
         image_path = self.img_path + self.image_names[idx]
         image = cv2.imread(f'{image_path}', cv2.IMREAD_COLOR)
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         if image is None:
             raise FileNotFoundError(image_path)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         target = self.labels[idx]
 
         img = self.transforms(image=image)['image']

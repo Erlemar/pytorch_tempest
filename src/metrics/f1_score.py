@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import torch
 
 
@@ -38,7 +36,7 @@ class F1Score:
     @staticmethod
     def calc_f1_count_for_label(
         predictions: torch.Tensor, labels: torch.Tensor, label_id: int
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+    ) -> tuple[torch.Tensor, torch.Tensor]:
         """
         Calculate f1 and true count for the label
 

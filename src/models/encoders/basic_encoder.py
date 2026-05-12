@@ -1,5 +1,3 @@
-from typing import Union, Optional
-
 import pretrainedmodels
 import timm
 import torch
@@ -15,11 +13,11 @@ class BasicEncoder(nn.Module):
         self,
         arch: str = 'resnet18',
         source: str = 'pretrainedmodels',
-        pretrained: Union[str, bool] = 'imagenet',
+        pretrained: str | bool = 'imagenet',
         n_layers: int = -2,
         freeze: bool = False,
         to_one_channel: bool = False,
-        freeze_until_layer: Optional[str] = None,
+        freeze_until_layer: str | None = None,
     ) -> None:
         """
         Initialize Encoder.
@@ -40,8 +38,10 @@ class BasicEncoder(nn.Module):
             net = torchvision.models.__dict__[arch](pretrained=pretrained)
             self.output_dimension = list(net.children())[-1].in_features
         elif source == 'timm':
-            net = timm.create_model(arch, pretrained=pretrained)
-            self.output_dimension = net.fc.in_features
+            net = timm.create_model(arch, pretrained=bool(pretrained))
+            fc = net.fc
+            assert isinstance(fc, nn.Linear), f'Expected nn.Linear classifier, got {type(fc).__name__}'
+            self.output_dimension = fc.in_features
         if source == 'efficientnet':
             net = EfficientNet.from_pretrained(arch)
             self.output_dimension = net._fc.in_features

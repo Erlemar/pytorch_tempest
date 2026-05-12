@@ -1,5 +1,3 @@
-from typing import Tuple, Dict, Optional
-
 import torch
 from torch import nn
 from torchcrf import CRF
@@ -12,10 +10,8 @@ class BiLSTMCRF(nn.Module):
     New model without nn.Embedding layer
     """
 
-    def __init__(
-        self, tag_to_idx: Dict, embeddings_dim: int = 100, hidden_dim: int = 4, spatial_dropout: float = 0.2
-    ):  # type: ignore
-        super(BiLSTMCRF, self).__init__()
+    def __init__(self, tag_to_idx: dict, embeddings_dim: int = 100, hidden_dim: int = 4, spatial_dropout: float = 0.2):  # type: ignore
+        super().__init__()
         self.embedding_dim = embeddings_dim
         self.hidden_dim = hidden_dim
         self.tag_to_idx = tag_to_idx
@@ -46,8 +42,8 @@ class BiLSTMCRF(nn.Module):
         return lstm_feats
 
     def forward(
-        self, embeds: torch.Tensor, lens: torch.Tensor, tags: Optional[torch.Tensor] = None
-    ) -> Tuple[int, torch.Tensor, torch.Tensor]:
+        self, embeds: torch.Tensor, lens: torch.Tensor, tags: torch.Tensor | None = None
+    ) -> tuple[int, torch.Tensor, torch.Tensor]:
         """
         Forward
 

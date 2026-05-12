@@ -1,5 +1,4 @@
 import json
-from typing import Dict
 
 import pytorch_lightning as pl
 import torch
@@ -37,7 +36,7 @@ class NerDataModule(pl.LightningDataModule):
 
         sentences, tok, ne = [], [], []
 
-        with open(filepath, 'r') as f:
+        with open(filepath) as f:
             for line in f.readlines():
                 if line in [('-DOCSTART- -X- -X- O\n'), '\n']:
                     # Sentence as a sequence of tokens, POS, chunk and NE tags
@@ -79,7 +78,7 @@ class NerDataModule(pl.LightningDataModule):
         # load or generate word_to_idx
         if self.cfg.datamodule.word_to_idx_name:
             with open(
-                f'{self.cfg.datamodule.folder_path}{self.cfg.datamodule.word_to_idx_name}', 'r', encoding='utf-8'
+                f'{self.cfg.datamodule.folder_path}{self.cfg.datamodule.word_to_idx_name}', encoding='utf-8'
             ) as f:
                 self.word_to_idx = json.load(f)
         else:

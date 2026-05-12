@@ -1,5 +1,3 @@
-from typing import List, Dict, Tuple
-
 import numpy as np
 import numpy.typing as npt
 import torch
@@ -8,11 +6,11 @@ from omegaconf import DictConfig
 from torch import nn
 from torch.utils.data import Dataset
 
-from src.utils.text_utils import pad_sequences, build_matrix
+from src.utils.text_utils import build_matrix, pad_sequences
 
 
 class NerDataset(Dataset):
-    def __init__(self, ner_data: List, word_to_idx: Dict, cfg: DictConfig, tag_to_idx: Dict, preload: bool = True):
+    def __init__(self, ner_data: list, word_to_idx: dict, cfg: DictConfig, tag_to_idx: dict, preload: bool = True):
         """
         Prepare data for wheat competition.
         Args:
@@ -35,7 +33,7 @@ class NerDataset(Dataset):
             self.word_to_idx = word_to_idx
             self.tag_to_idx = tag_to_idx
 
-    def __getitem__(self, idx: int) -> Tuple[npt.ArrayLike, int, npt.ArrayLike]:
+    def __getitem__(self, idx: int) -> tuple[npt.ArrayLike, int, npt.ArrayLike]:
         if self.preload:
             return self.tokens[idx], len(self.tokens[idx]), self.labels[idx]
 
@@ -59,7 +57,7 @@ class Collator:
         self.pad_value = pad_value
 
     def __call__(self, batch):
-        tokens, lens, labels = zip(*batch)
+        tokens, lens, labels = zip(*batch, strict=True)
         lens = np.array(lens)
 
         max_len = min(int(np.percentile(lens, self.percentile)), 100)
@@ -80,8 +78,8 @@ class Vectorizer(nn.Module):
     Transform tokens to embeddings
     """
 
-    def __init__(self, word_to_idx: Dict, embeddings_path: str, embeddings_type: str, embeddings_dim: int = 100):
-        super(Vectorizer, self).__init__()
+    def __init__(self, word_to_idx: dict, embeddings_path: str, embeddings_type: str, embeddings_dim: int = 100):
+        super().__init__()
         self.weights_matrix, _, _ = build_matrix(
             word_to_idx, embeddings_path, embeddings_type, max_features=len(word_to_idx), embed_size=embeddings_dim
         )
@@ -105,7 +103,7 @@ class InferenceVectorizer:
     def __call__(self, claim):
         splited_claim = claim.split()
         with torch.no_grad():
-            data_tensor = torch.tensor([self.fasttext[token] for token in splited_claim]).unsqueeze(0)
+            data_tensor = torch.tensor([self.fasttext.wv[token] for token in splited_claim]).unsqueeze(0)
             length_tensor = torch.tensor(len(splited_claim)).unsqueeze(0)
 
         return data_tensor, length_tensor

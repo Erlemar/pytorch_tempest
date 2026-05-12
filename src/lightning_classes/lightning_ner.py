@@ -1,6 +1,3 @@
-from typing import Dict
-
-import numpy as np
 import pytorch_lightning as pl
 import torch
 from omegaconf import DictConfig
@@ -9,8 +6,8 @@ from src.utils.technical_utils import load_obj
 
 
 class LitNER(pl.LightningModule):
-    def __init__(self, cfg: DictConfig, tag_to_idx: Dict):
-        super(LitNER, self).__init__()
+    def __init__(self, cfg: DictConfig, tag_to_idx: dict):
+        super().__init__()
         self.cfg = cfg
         self.tag_to_idx = tag_to_idx
         self.model = load_obj(cfg.model.class_name)(

@@ -1,7 +1,8 @@
 import collections
 import importlib
+from collections.abc import Generator
 from itertools import product
-from typing import Any, Dict, Generator
+from typing import Any
 
 import torch
 from omegaconf import DictConfig, OmegaConf
@@ -31,18 +32,16 @@ def load_obj(obj_path: str, default_obj_path: str = '') -> Any:
 
 def convert_to_jit(model: nn.Module, save_name: str, cfg: DictConfig) -> None:
     input_shape = (1, 3, cfg.datamodule.main_image_size, cfg.datamodule.main_image_size)
-    input_shape1 = 1
     out_path = f'saved_models/{save_name}_jit.pt'
     model.eval()
 
     device = next(model.parameters()).device
     input_tensor = torch.ones(input_shape).float().to(device)
-    input_tensor1 = torch.ones(input_shape1, dtype=torch.long).to(device)
-    traced_model = torch.jit.trace(model, (input_tensor, input_tensor1))
+    traced_model = torch.jit.trace(model, input_tensor)
     torch.jit.save(traced_model, out_path)
 
 
-def product_dict(**kwargs: Dict) -> Generator:
+def product_dict(**kwargs: dict) -> Generator:
     """
     Convert dict with lists in values into lists of all combinations
 
@@ -64,11 +63,11 @@ def product_dict(**kwargs: Dict) -> Generator:
     keys = kwargs.keys()
     vals = kwargs.values()
     for instance in product(*vals):
-        zip_list = list(zip(keys, instance))
+        zip_list = list(zip(keys, instance, strict=False))
         yield [f'{i}={j}' for i, j in zip_list]
 
 
-def config_to_hydra_dict(cfg: DictConfig) -> Dict:
+def config_to_hydra_dict(cfg: DictConfig) -> dict:
     """
     Convert config into dict with lists of values, where key is full name of parameter
 
